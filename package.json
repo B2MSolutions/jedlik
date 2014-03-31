@@ -1,0 +1,22 @@
+{
+  "name": "jedlik",
+  "version": "0.0.1",
+  "description": "Fluent syntax generator for DynamoDB.",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/B2MSolutions/jedlik.git"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/B2MSolutions/jedlik/issues"
+  },
+  "devDependencies": {
+    "mocha": "~1.18.2",
+    "chai": "~1.9.1"
+  }
+}
