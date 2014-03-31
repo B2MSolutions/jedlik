@@ -10,7 +10,11 @@
     "type": "git",
     "url": "git://github.com/B2MSolutions/jedlik.git"
   },
-  "author": "",
+  "author": { "name": "B2M Solutions", "url": "https://github.com/B2MSolutions" },
+  "contributors": [
+    { "name": "Roy Lines", "url":"https://github.com/roylines" },
+    { "name": "Alberto Zaccagni", "url":"https://github.com/lazywithclass" }
+  ],
   "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/B2MSolutions/jedlik/issues"
