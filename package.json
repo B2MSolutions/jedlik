@@ -4,23 +4,34 @@
   "description": "Fluent syntax generator for DynamoDB.",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/B2MSolutions/jedlik.git"
   },
-  "author": { "name": "B2M Solutions", "url": "https://github.com/B2MSolutions" },
-  "contributors": [
-    { "name": "Roy Lines", "url":"https://github.com/roylines" },
-    { "name": "Alberto Zaccagni", "url":"https://github.com/lazywithclass" }
-  ],
-  "license": "BSD-2-Clause",
-  "bugs": {
-    "url": "https://github.com/B2MSolutions/jedlik/issues"
+  "author": {
+    "name": "B2M Solutions",
+    "url": "https://github.com/B2MSolutions"
   },
+  "contributors": [{
+      "name": "Roy Lines",
+      "url": "https://github.com/roylines"
+    }, {
+      "name": "Alberto Zaccagni",
+      "url": "https://github.com/lazywithclass"
+    }
+  ],
+  "keywords": [
+      "dynamodb"
+  ],
+  "licenses": [{
+      "type": "MIT",
+      "url": "https://github.com/B2MSolutions/jedlik/raw/master/LICENSE"
+    }
+  ],
   "devDependencies": {
-    "mocha": "~1.18.2",
-    "chai": "~1.9.1"
+    "chai": "~1.9.1",
+    "mocha": "~1.18.2"
   }
 }
