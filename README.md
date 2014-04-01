@@ -3,7 +3,7 @@
 [![Build Status](https://secure.travis-ci.org/B2MSolutions/jedlik.png)](http://travis-ci.org/B2MSolutions/jedlik)
 
 ## Description
-Jedlik is a fluent syntax generator for DynamoDB.
+Jedlik is a fluent syntax generator for Amazon's DynamoDB.
 
 ## Why Jedlik?
 Ányos Jedlik was a Hungarian inventor and engineer.
