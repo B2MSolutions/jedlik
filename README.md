@@ -1,7 +1,7 @@
 # jedlik
 
 [![Build Status](https://secure.travis-ci.org/B2MSolutions/jedlik.png)](http://travis-ci.org/B2MSolutions/jedlik)
-![David Dependency Overview](https://david-dm.org/B2MSolutions/jedlik.png "David Dependency Overview")
+[![David Dependency Overview](https://david-dm.org/B2MSolutions/jedlik.png "David Dependency Overview")](https://david-dm.org/B2MSolutions/jedlik)
 
 ## Description
 Jedlik is a fluent syntax generator for Amazon's DynamoDB.
