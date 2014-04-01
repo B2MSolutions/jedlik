@@ -39,7 +39,7 @@ describe('lib', function() {
 
     it('should add the proper node to the query', function() {
       var key = 'key',
-        value = 'value';
+        value = '1';
       var expected = {
         KeyConditions: {
           key: {
@@ -55,22 +55,40 @@ describe('lib', function() {
       expect(this.jedlik.hashkey(key, value).query).to.deep.equal(expected);
     });
 
+    it('should handle numbers assigning the correct key to the JSON', function() {
+      var key = 'key',
+        value = 1;
+      var expected = {
+        KeyConditions: {
+          key: {
+            AttributeValueList: [{
+                N: '1'
+              }
+            ],
+            ComparisonOperator: 'EQ'
+          }
+        }
+      };
+
+      expect(this.jedlik.hashkey(key, value).query).to.deep.equal(expected);
+    });
+
   });
 
   describe('get', function() {
-    
+
     it('should add the proper node to the query', function() {
-      var attributesToGet = ['a','b','c']; 
+      var attributesToGet = ['a', 'b', 'c'];
       var expected = {
         AttributesToGet: attributesToGet
-      };  
+      };
 
       expect(this.jedlik.get(attributesToGet).query).to.deep.equal(expected);
     });
 
   });
 
-  xit('should have a fluent api', function() {
+  it('should have a fluent api', function() {
     function getMethods(obj) {
       var result = [];
       for (var id in obj) {
@@ -82,14 +100,18 @@ describe('lib', function() {
       }
       return result;
     }
-    var evalMe = 'expect(jedlik)';
+
     getMethods(new(this.lib)()).forEach(function(method) {
-      evalMe += '.' + method + '()';
-    });
-    eval.call(this, evalMe);
+      expect(this.jedlik[method](1,1)).to.equal(this.jedlik);
+    }.bind(this));
+  });
 
-    //expect(new (this.lib)().tablename().hashkey().rangekey()
-
+  it('should return a valid json', function() {
+    expect(this.jedlik
+      .tablename('tablename')
+      .hashkey('hashkey', 'hashkeyvalue')
+      .rangekey('rangekey', 'rangekeyvalue', 'BEGINS_WITH')
+      .get(['attribute1', 'attribute2']).query).to.deep.equal(require('./test-fixture'));
   });
 
 });
