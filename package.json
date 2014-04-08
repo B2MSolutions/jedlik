@@ -4,7 +4,7 @@
   "description": "Fluent syntax generator for DynamoDB.",
   "main": "index.js",
   "scripts": {
-    "test": "set -e;./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha test.js;./node_modules/istanbul/lib/cli.js check-coverage"
+    "test": "set -e;./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha test/test.js;./node_modules/istanbul/lib/cli.js check-coverage"
   },
   "repository": {
     "type": "git",
