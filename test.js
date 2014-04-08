@@ -24,7 +24,6 @@ describe('lib', function() {
   });
 
   describe('table', function() {
-
     it('should add the proper node to the query', function() {
       var name = 'asd';
       var expected = {
@@ -32,11 +31,9 @@ describe('lib', function() {
       };
       expect(this.jedlik.tablename(name).query).to.deep.equal(expected);
     });
-
   });
 
   describe('hashkey and rangekey', function() {
-
     it('should add the proper node to the query', function() {
       var key = 'key',
         value = '1';
@@ -72,11 +69,9 @@ describe('lib', function() {
 
       expect(this.jedlik.hashkey(key, value).query).to.deep.equal(expected);
     });
-
   });
 
   describe('get', function() {
-
     it('should add the proper node to the query', function() {
       var attributesToGet = ['a', 'b', 'c'];
       var expected = {
@@ -85,7 +80,6 @@ describe('lib', function() {
 
       expect(this.jedlik.get(attributesToGet).query).to.deep.equal(expected);
     });
-
   });
 
   it('should have a fluent api', function() {
@@ -102,7 +96,7 @@ describe('lib', function() {
     }
 
     getMethods(new(this.lib)()).forEach(function(method) {
-      expect(this.jedlik[method](1,1)).to.equal(this.jedlik);
+      expect(this.jedlik[method](1, 1)).to.equal(this.jedlik);
     }.bind(this));
   });
 

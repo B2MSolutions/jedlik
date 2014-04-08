@@ -1,10 +1,10 @@
 {
   "name": "jedlik",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Fluent syntax generator for DynamoDB.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "set -e;./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha test.js;./node_modules/istanbul/lib/cli.js check-coverage"
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,7 @@
   ],
   "devDependencies": {
     "chai": "~1.9.1",
+    "istanbul": "~0.2.7",
     "mocha": "~1.18.2"
   }
 }
