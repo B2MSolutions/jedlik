@@ -50,8 +50,7 @@ Jedlik.prototype.update = function() {
 
     json.AttributeUpdates[key] = {
       Action: attributeToUpdate.action,
-      Value: { 
-      } 
+      Value: {} 
     };
     json.AttributeUpdates[key].Value[attributeToUpdate.type] = attributeToUpdate.value;
   }.bind(this));
@@ -113,4 +112,21 @@ Jedlik.prototype.updateAttribute = function(key, value, action) {
   };
   return this;
 };
+
+Jedlik.prototype.del = function() {
+  var json = {
+    Key: {}    
+  };
+
+  json.Key[this._data.hashkey.key] = {};
+  json.Key[this._data.hashkey.key][this._data.hashkey.type] = this._data.hashkey.value;
+  
+  json.Key[this._data.rangekey.key] = {};
+  json.Key[this._data.rangekey.key][this._data.rangekey.type] = this._data.rangekey.value;
+  
+  this.addIfExists('TableName', 'tablename', json);
+
+  return json;
+};
+
 module.exports = Jedlik;

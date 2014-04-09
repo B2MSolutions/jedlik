@@ -1,0 +1,11 @@
+{
+  "Key": {
+    "hashkey": {
+      "S": "hashkeyvalue"
+    },
+    "rangekey": {
+      "S": "rangekeyvalue"
+    }
+  },
+  "TableName": "tablename"
+}

@@ -127,4 +127,12 @@ describe('lib', function() {
       .update()).to.deep.equal(require('./fixtures/update'));
   });
 
+  it('should return a valid json for delete', function() {
+    expect(this.jedlik
+      .tablename('tablename')
+      .hashkey('hashkey', 'hashkeyvalue')
+      .rangekey('rangekey', 'rangekeyvalue')
+      .del()).to.deep.equal(require('./fixtures/delete'));
+  });
+
 });
