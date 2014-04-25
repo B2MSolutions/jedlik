@@ -145,6 +145,15 @@ describe('lib', function() {
       .updateAttribute('attribute1', 'STR', 'PUT')
       .updateAttribute('attribute2', 1234)
       .update()).to.deep.equal(require('./fixtures/update'));
+  })
+
+  it('should return a valid json where range key is not needed for update', function() {
+    expect(this.jedlik
+      .tablename('tablename')
+      .hashkey('hashkey', 'hashkeyvalue')
+      .updateAttribute('attribute1', 'STR', 'PUT')
+      .updateAttribute('attribute2', 1234)
+      .update()).to.deep.equal(require('./fixtures/update-without-rangekey'));
   });
 
   describe('createTable', function () {
