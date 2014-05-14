@@ -87,7 +87,7 @@ describe('lib', function() {
     });
   });
 
-  describe('updateAttribute', function() {
+  describe('attribute', function() {
     it('should add attribute property', function() {
       var expected = {
         attribute1: {
@@ -99,11 +99,18 @@ describe('lib', function() {
           value: '1234',
           type: 'N',
           action: 'PUT'
+        },
+        attribute3: {
+          value: ['s1', 's2'],
+          type: 'SS',
+          action: 'PUT'
         }
       };
       expect(this.jedlik
-        .updateAttribute('attribute1', 'STR','PUT' )
-        .updateAttribute('attribute2', 1234)._data.attributesToUpdate).to.deep.equal(expected);
+        .attribute('attribute1', 'STR','PUT' )
+        .attribute('attribute2', 1234)
+        .attribute('attribute3', ['s1', 's2'])
+        ._data.attributes).to.deep.equal(expected);
     });
   });
 
@@ -142,8 +149,8 @@ describe('lib', function() {
       .tablename('tablename')
       .hashkey('hashkey', 'hashkeyvalue')
       .rangekey('rangekey', 'rangekeyvalue')
-      .updateAttribute('attribute1', 'STR', 'PUT')
-      .updateAttribute('attribute2', 1234)
+      .attribute('attribute1', 'STR', 'PUT')
+      .attribute('attribute2', 1234)
       .update()).to.deep.equal(require('./fixtures/update'));
   })
 
@@ -151,10 +158,20 @@ describe('lib', function() {
     expect(this.jedlik
       .tablename('tablename')
       .hashkey('hashkey', 'hashkeyvalue')
-      .updateAttribute('attribute1', 'STR', 'PUT')
-      .updateAttribute('attribute2', 1234)
+      .attribute('attribute1', 'STR', 'PUT')
+      .attribute('attribute2', 1234)
       .update()).to.deep.equal(require('./fixtures/update-without-rangekey'));
   });
+  
+  it('should return a valid json for put', function() {
+    expect(this.jedlik
+      .tablename('tablename')
+      .hashkey('hashkey', 'hashkeyvalue')
+      .rangekey('rangekey', 'rangekeyvalue')
+      .attribute('attribute1', 'STR')
+      .attribute('attribute2', 1234)
+      .put()).to.deep.equal(require('./fixtures/put'));
+  })
 
   describe('createTable', function () {
     it('should return a valid json for createTable when only hashkey is used', function () {

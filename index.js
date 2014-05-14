@@ -1,6 +1,6 @@
 function Jedlik() {
   this._data = {
-    attributesToUpdate: {}
+    attributes: {}
   };
   this.addIfExists = function(attributeName, fieldName, json) {
     if (this._data[fieldName]) {
@@ -45,8 +45,8 @@ Jedlik.prototype.update = function() {
     }
   };
 
-  Object.keys(this._data.attributesToUpdate).forEach(function(key) {
-    var attributeToUpdate = this._data.attributesToUpdate[key];
+  Object.keys(this._data.attributes).forEach(function(key) {
+    var attributeToUpdate = this._data.attributes[key];
 
     json.AttributeUpdates[key] = {
       Action: attributeToUpdate.action,
@@ -68,13 +68,48 @@ Jedlik.prototype.update = function() {
   return json;
 };
 
+Jedlik.prototype.put = function() {
+
+  var json = {
+    Item: {
+    }
+  };
+
+  Object.keys(this._data.attributes).forEach(function(key) {
+    var attributeToUpdate = this._data.attributes[key];
+
+    json.Item[key] = {};
+    json.Item[key][attributeToUpdate.type] = attributeToUpdate.value;
+  }.bind(this));
+
+  json.Item[this._data.hashkey.key] = {};
+  json.Item[this._data.hashkey.key][this._data.hashkey.type] = this._data.hashkey.value;
+
+  if (this._data.rangekey) {
+    json.Item[this._data.rangekey.key] = {};
+    json.Item[this._data.rangekey.key][this._data.rangekey.type] = this._data.rangekey.value;
+  }
+
+  this.addIfExists('TableName', 'tablename', json);
+
+  return json;
+};
+
 Jedlik.prototype.tablename = function(tablename) {
   this._data.tablename = tablename;
   return this;
 };
 
 var getType = function(value) {
+  if (Array.isArray(value)) {
+    return 'SS';
+  } 
+
   return Number.isFinite(value) ? 'N' : 'S';
+};
+
+var getValue = function(value) {
+  return Array.isArray(value) ? value : value.toString();
 };
 
 Jedlik.prototype.hashkey = function(key, value, type) {
@@ -111,9 +146,9 @@ Jedlik.prototype.throughput = function (throughput) {
   return this;
 };
 
-Jedlik.prototype.updateAttribute = function(key, value, action) {
-  this._data.attributesToUpdate[key] = {
-    value: value.toString(),
+Jedlik.prototype.attribute = function(key, value, action) {
+  this._data.attributes[key] = {
+    value: getValue(value),
     type: getType(value),
     action: action || 'PUT'
   };

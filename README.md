@@ -47,3 +47,7 @@ Accepts an array of attributes to get.
 ### query
 
 Returns the constructed JSON query.
+
+### put
+
+Returns the constructed JSON putItem.
