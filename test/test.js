@@ -152,6 +152,27 @@ describe('lib', function() {
       .attribute('attribute1', 'STR', 'PUT')
       .attribute('attribute2', 1234)
       .update()).to.deep.equal(require('./fixtures/update'));
+  });
+
+  it('should return a valid json for update with return values', function() {
+    expect(this.jedlik
+      .tablename('tablename')
+      .hashkey('hashkey', 'hashkeyvalue')
+      .rangekey('rangekey', 'rangekeyvalue')
+      .attribute('attribute1', 'STR', 'PUT')
+      .attribute('attribute2', 1234)
+      .returnvals('ALL_OLD')
+      .update()).to.deep.equal(require('./fixtures/update-with-return-values'));
+  });
+
+  it('should return a valid json for update', function() {
+    expect(this.jedlik
+      .tablename('tablename')
+      .hashkey('hashkey', 'hashkeyvalue')
+      .rangekey('rangekey', 'rangekeyvalue')
+      .attribute('attribute1', 'STR', 'PUT')
+      .attribute('attribute2', 1234)
+      .update()).to.deep.equal(require('./fixtures/update'));
   })
 
   it('should return a valid json where range key is not needed for update', function() {

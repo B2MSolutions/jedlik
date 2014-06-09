@@ -64,6 +64,7 @@ Jedlik.prototype.update = function() {
   }
 
   this.addIfExists('TableName', 'tablename', json);
+  this.addIfExists('ReturnValues', 'returnvals', json);
 
   return json;
 };
@@ -152,6 +153,11 @@ Jedlik.prototype.attribute = function(key, value, action) {
     type: getType(value),
     action: action || 'PUT'
   };
+  return this;
+};
+
+Jedlik.prototype.returnvals = function(returnvalsType) {
+  this._data.returnvals = returnvalsType;  
   return this;
 };
 

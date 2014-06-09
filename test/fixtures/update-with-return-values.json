@@ -1,0 +1,26 @@
+{
+  "AttributeUpdates": {
+    "attribute1": {
+      "Action": "PUT",
+      "Value": {
+        "S": "STR"
+      }
+    },
+    "attribute2": {
+      "Action": "PUT",
+      "Value": {
+        "N": "1234"
+      }
+    }
+  },
+  "Key": {
+    "hashkey": {
+      "S": "hashkeyvalue"
+    },
+    "rangekey": {
+      "S": "rangekeyvalue"
+    }
+  },
+  "TableName": "tablename",
+  "ReturnValues": "ALL_OLD"
+}
