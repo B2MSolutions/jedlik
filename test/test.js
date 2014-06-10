@@ -234,4 +234,18 @@ describe('lib', function() {
       .del()).to.deep.equal(require('./fixtures/delete'));
   });
 
+  describe('batchwrite', function() {
+
+    it('should accept more a tablename and attributes', function() {
+      expect(this.jedlik
+        .tablename('tablename')
+        .attribute('key1', 'value1')
+        .attribute('key2', 'value2')
+        .batchWrite()).to.deep.equal(require('./fixtures/batchwrite'));
+    });
+
+  });
+
 });
+
+

@@ -1,0 +1,21 @@
+{
+  "RequestItems": {
+    "tablename": [{
+      "PutRequest": {
+        "Item": {
+          "key1": {
+            "S": "value1"
+          }
+        }
+      }
+    }, {
+      "PutRequest": {
+        "Item": {
+          "key2": {
+            "S": "value2"
+          }
+        }
+      }
+    }]
+  }
+}

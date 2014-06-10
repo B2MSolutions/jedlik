@@ -220,4 +220,30 @@ Jedlik.prototype.createTable = function () {
   return json;
 };
 
+Jedlik.prototype.batchWrite = function() {
+  var json = {
+    RequestItems: {}
+  };
+
+  var attributes = this._data.attributes;
+
+  var items = [];
+  for (var key in attributes) {
+    var item =  {
+      PutRequest: {
+        Item: {
+        }
+      }
+    };
+
+    var itemValue = {};
+    itemValue[getType(attributes[key])] = attributes[key].value;
+    item.PutRequest.Item[key] = itemValue;
+    items.push(item);
+  }
+
+  json.RequestItems[this._data.tablename] = items;
+  return json;
+};
+
 module.exports = Jedlik;
