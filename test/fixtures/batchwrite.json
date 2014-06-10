@@ -4,7 +4,7 @@
       "PutRequest": {
         "Item": {
           "key1": {
-            "S": "value1"
+            "N": "1"
           },
           "key2": {
             "S": "value2"

@@ -243,7 +243,7 @@ describe('lib', function() {
     it('should accept a tablename and items', function() {
       expect(this.jedlik
         .tablename('tablename')
-        .item({ key1: "value1", key2: "value2" })
+        .item({ key1: 1, key2: "value2" })
         .item({ key3: "value3", key4: "value4" })
         .batchWrite()).to.deep.equal(require('./fixtures/batchwrite'));
     });

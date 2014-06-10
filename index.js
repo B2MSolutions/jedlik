@@ -242,7 +242,7 @@ Jedlik.prototype.batchWrite = function() {
     Object.keys(item).forEach(function(key) {
       var value = item[key];
       itemDDB.PutRequest.Item[key] = {};
-      itemDDB.PutRequest.Item[key][getType(value)] = value;
+      itemDDB.PutRequest.Item[key][getType(value)] = value.toString();
     });
 
     items.push(itemDDB);
