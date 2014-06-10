@@ -1,6 +1,7 @@
 function Jedlik() {
   this._data = {
-    attributes: {}
+    attributes: {},
+    items: []
   };
   this.addIfExists = function(attributeName, fieldName, json) {
     if (this._data[fieldName]) {
@@ -118,7 +119,7 @@ Jedlik.prototype.hashkey = function(key, value, type) {
     key: key,
     value: value,
     type: type || getType(value)
-  }
+  };
   return this;
 };
 
@@ -128,7 +129,7 @@ Jedlik.prototype.rangekey = function(key, value, comparisonOp, type) {
     value: value,
     type: type || getType(value),
     comparisonOp: comparisonOp || 'EQ'
-  }
+  };
   return this;
 };
 
@@ -220,27 +221,32 @@ Jedlik.prototype.createTable = function () {
   return json;
 };
 
+Jedlik.prototype.item = function(item) {
+  this._data.items.push(item);
+  return this;
+};
+
 Jedlik.prototype.batchWrite = function() {
   var json = {
     RequestItems: {}
   };
 
-  var attributes = this._data.attributes;
-
   var items = [];
-  for (var key in attributes) {
-    var item =  {
+  this._data.items.forEach(function(item) {
+    var itemDDB = {
       PutRequest: {
-        Item: {
-        }
+        Item: {}
       }
     };
 
-    var itemValue = {};
-    itemValue[getType(attributes[key])] = attributes[key].value;
-    item.PutRequest.Item[key] = itemValue;
-    items.push(item);
-  }
+    Object.keys(item).forEach(function(key) {
+      var value = item[key];
+      itemDDB.PutRequest.Item[key] = {};
+      itemDDB.PutRequest.Item[key][getType(value)] = value;
+    });
+
+    items.push(itemDDB);
+  });
 
   json.RequestItems[this._data.tablename] = items;
   return json;

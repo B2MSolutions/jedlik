@@ -32,7 +32,7 @@ describe('lib', function() {
       expect(this.jedlik.hashkey(expected.key, expected.value)._data.hashkey).to.deep.equal(expected);
     });
 
-    it('should add hashkey property with the same type as specified in call params', function () {
+    it('should add hashkey property with the same type as specified in call params', function() {
       var expected = {
         key: 'KEY',
         value: 'VALUE',
@@ -107,7 +107,7 @@ describe('lib', function() {
         }
       };
       expect(this.jedlik
-        .attribute('attribute1', 'STR','PUT' )
+        .attribute('attribute1', 'STR', 'PUT')
         .attribute('attribute2', 1234)
         .attribute('attribute3', ['s1', 's2'])
         ._data.attributes).to.deep.equal(expected);
@@ -183,7 +183,7 @@ describe('lib', function() {
       .attribute('attribute2', 1234)
       .update()).to.deep.equal(require('./fixtures/update-without-rangekey'));
   });
-  
+
   it('should return a valid json for put', function() {
     expect(this.jedlik
       .tablename('tablename')
@@ -194,15 +194,15 @@ describe('lib', function() {
       .put()).to.deep.equal(require('./fixtures/put'));
   })
 
-  describe('createTable', function () {
-    it('should return a valid json for createTable when only hashkey is used', function () {
+  describe('createTable', function() {
+    it('should return a valid json for createTable when only hashkey is used', function() {
       expect(this.jedlik
         .tablename('tablename')
         .hashkey('hashkey', null, 'S')
         .createTable()).to.deep.equal(require('./fixtures/createTable_hash'));
     });
 
-    it('should return a valid json for createTable when both hashkey and rangekey are used', function () {
+    it('should return a valid json for createTable when both hashkey and rangekey are used', function() {
       expect(this.jedlik
         .tablename('tablename')
         .hashkey('hashkey', null, 'S')
@@ -210,18 +210,22 @@ describe('lib', function() {
         .createTable()).to.deep.equal(require('./fixtures/createTable_range'));
     });
 
-    it('should throw an error if user tries to call create table without calling "hashkey" method first', function () {
+    it('should throw an error if user tries to call create table without calling "hashkey" method first', function() {
       var tablename = this.jedlik.tablename('tablename')
       var createTable = tablename.createTable.bind(tablename);
 
-      expect(createTable).to.throw('Setup hash key using "hashkey" method to create a new table');
+      expect(createTable).to.
+      throw ('Setup hash key using "hashkey" method to create a new table');
     });
 
-    it('should return a valid json for createTable with provision throughput set if it is present', function () {
+    it('should return a valid json for createTable with provision throughput set if it is present', function() {
       expect(this.jedlik
         .tablename('tablename')
         .hashkey('hashkey', null, 'S')
-        .throughput({read: 5, write: 7})
+        .throughput({
+          read: 5,
+          write: 7
+        })
         .createTable()).to.deep.equal(require('./fixtures/createTable_throughput'));
     });
   });
@@ -236,16 +240,14 @@ describe('lib', function() {
 
   describe('batchwrite', function() {
 
-    it('should accept more a tablename and attributes', function() {
+    it('should accept a tablename and items', function() {
       expect(this.jedlik
         .tablename('tablename')
-        .attribute('key1', 'value1')
-        .attribute('key2', 'value2')
+        .item({ key1: "value1", key2: "value2" })
+        .item({ key3: "value3", key4: "value4" })
         .batchWrite()).to.deep.equal(require('./fixtures/batchwrite'));
     });
 
   });
 
 });
-
-

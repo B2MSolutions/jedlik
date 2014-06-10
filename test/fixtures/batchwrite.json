@@ -5,14 +5,20 @@
         "Item": {
           "key1": {
             "S": "value1"
+          },
+          "key2": {
+            "S": "value2"
           }
         }
       }
     }, {
       "PutRequest": {
         "Item": {
-          "key2": {
-            "S": "value2"
+          "key3": {
+            "S": "value3"
+          },
+          "key4": {
+            "S": "value4"
           }
         }
       }
