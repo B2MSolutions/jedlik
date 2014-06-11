@@ -1,0 +1,19 @@
+{
+  "KeyConditions": {
+    "hashkey": {
+      "AttributeValueList": [{
+          "S": "hashkeyvalue"
+        }
+      ]
+    },
+    "rangekey": {
+      "AttributeValueList": [{
+          "S": "rangekeyvalue"
+        }
+      ],
+      "ComparisonOperator": "BEGINS_WITH"
+    }
+  },
+  "TableName": "tablename",
+  "Select": "COUNT"
+}

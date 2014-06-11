@@ -144,6 +144,14 @@ describe('lib', function() {
       .attributes(['attribute1', 'attribute2']).query()).to.deep.equal(require('./fixtures/query'));
   });
 
+  it('should return a valid json for query with select', function() {
+    expect(this.jedlik
+      .tablename('tablename')
+      .hashkey('hashkey', 'hashkeyvalue')
+      .rangekey('rangekey', 'rangekeyvalue', 'BEGINS_WITH')
+      .select('COUNT').query()).to.deep.equal(require('./fixtures/query_with_select'));
+  });
+
   it('should return a valid json for update', function() {
     expect(this.jedlik
       .tablename('tablename')

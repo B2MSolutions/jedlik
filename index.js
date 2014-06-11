@@ -31,9 +31,13 @@ Jedlik.prototype.query = function() {
   json.KeyConditions[this._data.rangekey.key].AttributeValueList[0][this._data.rangekey.type] = this._data.rangekey.value.toString();
 
   this.addIfExists('TableName', 'tablename', json);
-  this.addIfExists('AttributesToGet', 'attributes', json);
+
+  if (!this._data.select) {
+    this.addIfExists('AttributesToGet', 'attributes', json);
+  }
+
   this.addIfExists('Limit', 'limit', json);
-  this.addIfExists('Limit', 'limit', json);
+  this.addIfExists('Select', 'select', json);
 
   return json;
 };
@@ -135,6 +139,11 @@ Jedlik.prototype.rangekey = function(key, value, comparisonOp, type) {
 
 Jedlik.prototype.limit = function(limit) {
   this._data.limit = limit;
+  return this;
+};
+
+Jedlik.prototype.select = function(select) {
+  this._data.select = select;
   return this;
 };
 
