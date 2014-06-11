@@ -18,7 +18,8 @@ Jedlik.prototype.query = function() {
   };
 
   json.KeyConditions[this._data.hashkey.key] = {
-    AttributeValueList: [{}]
+    AttributeValueList: [{}],
+    ComparisonOperator: 'EQ'
   };
 
   json.KeyConditions[this._data.hashkey.key].AttributeValueList[0][this._data.hashkey.type] = this._data.hashkey.value.toString();

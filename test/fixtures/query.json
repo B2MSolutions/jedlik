@@ -5,7 +5,8 @@
       "AttributeValueList": [{
           "S": "hashkeyvalue"
         }
-      ]
+      ],
+      "ComparisonOperator": "EQ"
     },
     "rangekey": {
       "AttributeValueList": [{
