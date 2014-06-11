@@ -152,6 +152,13 @@ describe('lib', function() {
       .select('COUNT').query()).to.deep.equal(require('./fixtures/query_with_select'));
   });
 
+  it('should return a valid json for query with select no rangekey', function() {
+    expect(this.jedlik
+      .tablename('tablename')
+      .hashkey('hashkey', 'hashkeyvalue')
+      .select('COUNT').query()).to.deep.equal(require('./fixtures/query_with_select_no_rangekey'));
+  });
+
   it('should return a valid json for update', function() {
     expect(this.jedlik
       .tablename('tablename')

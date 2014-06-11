@@ -1,0 +1,12 @@
+{
+  "KeyConditions": {
+    "hashkey": {
+      "AttributeValueList": [{
+          "S": "hashkeyvalue"
+        }
+      ]
+    }
+  },
+  "TableName": "tablename",
+  "Select": "COUNT"
+}

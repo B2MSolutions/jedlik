@@ -23,12 +23,14 @@ Jedlik.prototype.query = function() {
 
   json.KeyConditions[this._data.hashkey.key].AttributeValueList[0][this._data.hashkey.type] = this._data.hashkey.value.toString();
 
-  json.KeyConditions[this._data.rangekey.key] = {
-    AttributeValueList: [{}],
-    ComparisonOperator: this._data.rangekey.comparisonOp
-  };
+  if (this._data.rangekey) {
+    json.KeyConditions[this._data.rangekey.key] = {
+      AttributeValueList: [{}],
+      ComparisonOperator: this._data.rangekey.comparisonOp
+    };
 
-  json.KeyConditions[this._data.rangekey.key].AttributeValueList[0][this._data.rangekey.type] = this._data.rangekey.value.toString();
+    json.KeyConditions[this._data.rangekey.key].AttributeValueList[0][this._data.rangekey.type] = this._data.rangekey.value.toString();
+  }
 
   this.addIfExists('TableName', 'tablename', json);
 
@@ -46,8 +48,7 @@ Jedlik.prototype.update = function() {
 
   var json = {
     AttributeUpdates: {},
-    Key: {
-    }
+    Key: {}
   };
 
   Object.keys(this._data.attributes).forEach(function(key) {
@@ -77,8 +78,7 @@ Jedlik.prototype.update = function() {
 Jedlik.prototype.put = function() {
 
   var json = {
-    Item: {
-    }
+    Item: {}
   };
 
   Object.keys(this._data.attributes).forEach(function(key) {
@@ -109,7 +109,7 @@ Jedlik.prototype.tablename = function(tablename) {
 var getType = function(value) {
   if (Array.isArray(value)) {
     return 'SS';
-  } 
+  }
 
   return Number.isFinite(value) ? 'N' : 'S';
 };
@@ -152,7 +152,7 @@ Jedlik.prototype.attributes = function(attributes) {
   return this;
 };
 
-Jedlik.prototype.throughput = function (throughput) {
+Jedlik.prototype.throughput = function(throughput) {
   this._data.throughput = throughput;
   return this;
 };
@@ -167,7 +167,7 @@ Jedlik.prototype.attribute = function(key, value, action) {
 };
 
 Jedlik.prototype.returnvals = function(returnvalsType) {
-  this._data.returnvals = returnvalsType;  
+  this._data.returnvals = returnvalsType;
   return this;
 };
 
@@ -187,7 +187,7 @@ Jedlik.prototype.del = function() {
   return json;
 };
 
-Jedlik.prototype.createTable = function () {
+Jedlik.prototype.createTable = function() {
   var throughput = {
     read: (this._data.throughput && this._data.throughput.read) || 1,
     write: (this._data.throughput && this._data.throughput.write) || 1
@@ -203,7 +203,7 @@ Jedlik.prototype.createTable = function () {
     TableName: this._data.tablename
   };
 
-  if(this._data.hashkey) {
+  if (this._data.hashkey) {
     json.AttributeDefinitions.push({
       AttributeName: this._data.hashkey.key,
       AttributeType: this._data.hashkey.type
@@ -216,7 +216,7 @@ Jedlik.prototype.createTable = function () {
     throw new Error('Setup hash key using "hashkey" method to create a new table');
   }
 
-  if(this._data.rangekey) {
+  if (this._data.rangekey) {
     json.AttributeDefinitions.push({
       AttributeName: this._data.rangekey.key,
       AttributeType: this._data.rangekey.type
