@@ -148,7 +148,7 @@ describe('lib', function() {
     expect(this.jedlik
       .tablename('tablename')
       .hashkey('hashkey', 'hashkeyvalue')
-      .starthashkey('starthashkeyvalue')
+      .starthashkey('starthashkey', 'starthashkeyvalue')
       .attributes(['attribute1', 'attribute2']).query()).to.deep.equal(require('./fixtures/query_with_startkey_hash_only'));
   });
 
@@ -157,8 +157,8 @@ describe('lib', function() {
       .tablename('tablename')
       .hashkey('hashkey', 'hashkeyvalue')
       .rangekey('rangekey', 'rangekeyvalue')
-      .starthashkey('starthashkeyvalue')
-      .startrangekey('startrangekeyvalue')
+      .starthashkey('starthashkey', 'starthashkeyvalue')
+      .startrangekey('startrangekey', 'startrangekeyvalue')
       .attributes(['attribute1', 'attribute2']).query()).to.deep.equal(require('./fixtures/query_with_startkey'));
   });
 

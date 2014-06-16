@@ -41,12 +41,12 @@ Jedlik.prototype.query = function() {
 
   if (this._data.starthashkey) {
     json.ExclusiveStartKey = {}
-    json.ExclusiveStartKey[this._data.hashkey.key] = {};
-    json.ExclusiveStartKey[this._data.hashkey.key][this._data.hashkey.type] = this._data.starthashkey.toString();
+    json.ExclusiveStartKey[this._data.starthashkey.key] = {};
+    json.ExclusiveStartKey[this._data.starthashkey.key][this._data.starthashkey.type] = this._data.starthashkey.value.toString();
 
     if(this._data.startrangekey) {
-      json.ExclusiveStartKey[this._data.rangekey.key] = {};
-      json.ExclusiveStartKey[this._data.rangekey.key][this._data.rangekey.type] = this._data.startrangekey.toString();
+      json.ExclusiveStartKey[this._data.startrangekey.key] = {};
+      json.ExclusiveStartKey[this._data.startrangekey.key][this._data.startrangekey.type] = this._data.startrangekey.value.toString();
     }
   }
 
@@ -140,15 +140,21 @@ Jedlik.prototype.hashkey = function(key, value, type) {
   return this;
 };
 
-Jedlik.prototype.starthashkey = function(value) {
-  this._data.starthashkey = value;
-
+Jedlik.prototype.starthashkey = function(key, value, type) {
+  this._data.starthashkey = {
+    key: key,
+    value: value,
+    type: type || getType(value)
+  };
   return this;
 };
 
-Jedlik.prototype.startrangekey = function(value) {
-  this._data.startrangekey = value;
-
+Jedlik.prototype.startrangekey = function(key, value, type) {
+  this._data.startrangekey = {
+    key: key,
+    value: value,
+    type: type || getType(value)
+  };
   return this;
 };
 

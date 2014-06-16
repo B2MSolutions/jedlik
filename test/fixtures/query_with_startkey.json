@@ -17,10 +17,10 @@
     }
   },
   "ExclusiveStartKey": {
-    "hashkey": {
+    "starthashkey": {
       "S": "starthashkeyvalue"
     },
-    "rangekey": {
+    "startrangekey": {
       "S": "startrangekeyvalue"
     }
   },
