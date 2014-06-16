@@ -52,7 +52,10 @@ Jedlik.prototype.query = function() {
 
   this.addIfExists('Limit', 'limit', json);
   this.addIfExists('Select', 'select', json);
-  this.addIfExists('ScanIndexForward', 'ascending', json);
+
+  if (this._data.ascending === false) {
+    json.ScanIndexForward = false;
+  }
 
   return json;
 };

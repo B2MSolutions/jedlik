@@ -171,6 +171,16 @@ describe('lib', function() {
       .ascending(true)
       .query()).to.deep.equal(require('./fixtures/query_with_sort'));
   });
+  
+  it('should return a valid json for query with descending sort', function() {
+    expect(this.jedlik
+      .tablename('tablename')
+      .hashkey('hashkey', 'hashkeyvalue')
+      .rangekey('rangekey', 'rangekeyvalue', 'BEGINS_WITH')
+      .attributes(['attribute1', 'attribute2'])
+      .ascending(false)
+      .query()).to.deep.equal(require('./fixtures/query_with_sort_descending'));
+  });
 
   it('should return a valid json for query with select', function() {
     expect(this.jedlik

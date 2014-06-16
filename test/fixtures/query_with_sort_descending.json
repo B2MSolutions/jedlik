@@ -16,5 +16,6 @@
       "ComparisonOperator": "BEGINS_WITH"
     }
   },
-  "TableName": "tablename"
+  "TableName": "tablename",
+  "ScanIndexForward": false
 }
