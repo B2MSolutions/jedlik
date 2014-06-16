@@ -143,6 +143,34 @@ describe('lib', function() {
       .rangekey('rangekey', 'rangekeyvalue', 'BEGINS_WITH')
       .attributes(['attribute1', 'attribute2']).query()).to.deep.equal(require('./fixtures/query'));
   });
+  
+  it('should return a valid json for query with start key (no range key)', function() {
+    expect(this.jedlik
+      .tablename('tablename')
+      .hashkey('hashkey', 'hashkeyvalue')
+      .starthashkey('starthashkeyvalue')
+      .attributes(['attribute1', 'attribute2']).query()).to.deep.equal(require('./fixtures/query_with_startkey_hash_only'));
+  });
+
+  it('should return a valid json for query with start key', function() {
+    expect(this.jedlik
+      .tablename('tablename')
+      .hashkey('hashkey', 'hashkeyvalue')
+      .rangekey('rangekey', 'rangekeyvalue')
+      .starthashkey('starthashkeyvalue')
+      .startrangekey('startrangekeyvalue')
+      .attributes(['attribute1', 'attribute2']).query()).to.deep.equal(require('./fixtures/query_with_startkey'));
+  });
+
+  it('should return a valid json for query with sort', function() {
+    expect(this.jedlik
+      .tablename('tablename')
+      .hashkey('hashkey', 'hashkeyvalue')
+      .rangekey('rangekey', 'rangekeyvalue', 'BEGINS_WITH')
+      .attributes(['attribute1', 'attribute2'])
+      .ascending(true)
+      .query()).to.deep.equal(require('./fixtures/query_with_sort'));
+  });
 
   it('should return a valid json for query with select', function() {
     expect(this.jedlik

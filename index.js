@@ -39,8 +39,20 @@ Jedlik.prototype.query = function() {
     this.addIfExists('AttributesToGet', 'attributes', json);
   }
 
+  if (this._data.starthashkey) {
+    json.ExclusiveStartKey = {}
+    json.ExclusiveStartKey[this._data.hashkey.key] = {};
+    json.ExclusiveStartKey[this._data.hashkey.key][this._data.hashkey.type] = this._data.starthashkey.toString();
+
+    if(this._data.startrangekey) {
+      json.ExclusiveStartKey[this._data.rangekey.key] = {};
+      json.ExclusiveStartKey[this._data.rangekey.key][this._data.rangekey.type] = this._data.startrangekey.toString();
+    }
+  }
+
   this.addIfExists('Limit', 'limit', json);
   this.addIfExists('Select', 'select', json);
+  this.addIfExists('ScanIndexForward', 'ascending', json);
 
   return json;
 };
@@ -128,6 +140,18 @@ Jedlik.prototype.hashkey = function(key, value, type) {
   return this;
 };
 
+Jedlik.prototype.starthashkey = function(value) {
+  this._data.starthashkey = value;
+
+  return this;
+};
+
+Jedlik.prototype.startrangekey = function(value) {
+  this._data.startrangekey = value;
+
+  return this;
+};
+
 Jedlik.prototype.rangekey = function(key, value, comparisonOp, type) {
   this._data.rangekey = {
     key: key,
@@ -145,6 +169,11 @@ Jedlik.prototype.limit = function(limit) {
 
 Jedlik.prototype.select = function(select) {
   this._data.select = select;
+  return this;
+};
+
+Jedlik.prototype.ascending = function(ascending) {
+  this._data.ascending = ascending;
   return this;
 };
 
