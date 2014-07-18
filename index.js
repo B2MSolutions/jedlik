@@ -300,4 +300,27 @@ Jedlik.prototype.batchWrite = function() {
   return json;
 };
 
+Jedlik.prototype.mapItem = function(item, keysToOmit) {
+  var ret = {}, keysToOmit = keysToOmit || [];
+  for (var key in item) {
+
+    if (keysToOmit.indexOf(key) === -1) {
+      var valueObj = item[key],
+        type = Object.keys(valueObj)[0],
+        value = item[key][type];
+    
+      ret[key] = type === 'N' ? parseFloat(value, 10) : value;
+    }
+  }
+
+  return ret;
+};
+
+Jedlik.prototype.mapItems = function(items, keysToOmit) {
+  var self = this;
+  return items.map(function(item) {
+    return self.mapItem(item, keysToOmit);
+  });
+};
+
 module.exports = Jedlik;

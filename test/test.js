@@ -1,4 +1,5 @@
-var expect = require('chai').expect;
+var expect = require('chai').expect,
+    sinon = require('sinon');
 
 describe('lib', function() {
 
@@ -245,6 +246,18 @@ describe('lib', function() {
       .attribute('attribute1', 'STR')
       .attribute('attribute2', 1234)
       .put()).to.deep.equal(require('./fixtures/put'));
+  });
+
+  it('should return a valid json for put without rangekey', function() {
+    var fixtureWithoutRangekey = require('./fixtures/put');
+    delete fixtureWithoutRangekey.Item.rangekey;
+
+    expect(this.jedlik
+      .tablename('tablename')
+      .hashkey('hashkey', 'hashkeyvalue')
+      .attribute('attribute1', 'STR')
+      .attribute('attribute2', 1234)
+      .put()).to.deep.equal(fixtureWithoutRangekey);
   })
 
   describe('createTable', function() {
@@ -301,6 +314,137 @@ describe('lib', function() {
         .batchWrite()).to.deep.equal(require('./fixtures/batchwrite'));
     });
 
+  });
+
+  describe('mapItem', function() {
+    
+    it('should convert from DynamoDB syntax to JavaScript object syntax', function() {
+      var item = {
+        a: {
+          N: "1"
+        },
+        b: {
+          S: "a"
+        },
+        c: {
+          N: "1.1"
+        },
+        d: {
+          SS: ["a", "b"]
+        }
+      };
+
+      var expected = {
+        a: 1,
+        b: "a",
+        c: 1.1,
+        d: ["a", "b"]
+      };
+
+      var actual = this.jedlik.mapItem(item);
+      expect(actual.a).to.equal(expected.a);
+      expect(actual.b).to.equal(expected.b);
+      expect(actual.c).to.equal(expected.c);
+      expect(actual.d[0]).to.equal(expected.d[0]);
+      expect(actual.d[1]).to.equal(expected.d[1]);
+    });
+
+    it('should return expected json with omitted keys', function() {
+      var item = {
+        a: {
+          N: "1"
+        },
+        b: {
+          S: "a"
+        },
+        c: {
+          N: "1.1"
+        },
+        d: {
+          SS: ["a", "b"]
+        }
+      };
+
+      var expected = {
+        b: "a",
+        d: ["a", "b"]
+      };
+
+      var actual = this.jedlik.mapItem(item, ['a', 'c']);
+      expect(actual.a).to.equal(expected.a);
+      expect(actual.b).to.equal(expected.b);
+      expect(actual.c).to.equal(expected.c);
+      expect(actual.d[0]).to.equal(expected.d[0]);
+      expect(actual.d[1]).to.equal(expected.d[1]);
+    });
+  });
+
+  describe('mapItems', function() {
+
+    beforeEach(function() {
+      sinon.stub(this.jedlik, 'mapItem');
+    });
+
+    afterEach(function(){
+      if (this.jedlik.mapItem.restore) {
+        this.jedlik.mapItem.restore();
+      }
+    });
+
+    it('should call mapItem items.length times producing the expected json', function() {
+      var item = {
+        a: {
+          N: "1"
+        },
+        b: {
+          S: "a"
+        },
+        c: {
+          N: "1.1"
+        },
+        d: {
+          SS: ["a", "b"]
+        }
+      };
+      var items = [item, item];
+      var expected = {
+        a: 1,
+        b: "a",
+        c: 1.1,
+        d: ["a", "b"]
+      };
+      this.jedlik.mapItem.returns(expected);
+
+      var result = this.jedlik.mapItems(items);
+      expect(this.jedlik.mapItem.callCount).to.equal(2);
+      expect(result).to.deep.equal([expected, expected])
+    });
+
+    it('should call mapItem items.length times producing the expected json when passing keys to omit', function() {
+      this.jedlik.mapItem.restore();
+      var item = {
+        a: {
+          N: "1"
+        },
+        b: {
+          S: "a"
+        },
+        c: {
+          N: "1.1"
+        },
+        d: {
+          SS: ["a", "b"]
+        }
+      };
+      var items = [item, item];
+      var expected = {
+        b: "a",
+        d: ["a", "b"]
+      };
+
+      var result = this.jedlik.mapItems(items, ['a', 'c']);
+      expect(result).to.deep.equal([expected, expected])
+    });
   });
 
 });
