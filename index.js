@@ -302,7 +302,9 @@ Jedlik.prototype.batchWrite = function() {
 
 Jedlik.prototype.mapItem = function(item, keysToOmit) {
   var ret = {}, keysToOmit = keysToOmit || [];
-  for (var key in item) {
+  var itemKeys = Object.keys(item);
+  for (var i = 0; i < itemKeys.length; i++) {
+    var key = itemKeys[i];
 
     if (keysToOmit.indexOf(key) === -1) {
       var valueObj = item[key],
