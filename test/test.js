@@ -1,5 +1,5 @@
 var expect = require('chai').expect,
-    sinon = require('sinon');
+  sinon = require('sinon');
 
 describe('lib', function() {
 
@@ -73,6 +73,16 @@ describe('lib', function() {
       };
       expect(this.jedlik.rangekey(expected.key, expected.value, expected.comparisonOp, 'B')._data.rangekey).to.deep.equal(expected);
     });
+
+    it('should add rangekey property of type number', function() {
+      var expected = {
+        key: 'KEY',
+        value: '42',
+        type: 'N',
+        comparisonOp: 'COMPARISONOP'
+      };
+      expect(this.jedlik.rangekey(expected.key, 42, expected.comparisonOp)._data.rangekey).to.deep.equal(expected);
+    });
   });
 
   describe('attributes', function() {
@@ -144,7 +154,7 @@ describe('lib', function() {
       .rangekey('rangekey', 'rangekeyvalue', 'BEGINS_WITH')
       .attributes(['attribute1', 'attribute2']).query()).to.deep.equal(require('./fixtures/query'));
   });
-  
+
   it('should return a valid json for query with start key (no range key)', function() {
     expect(this.jedlik
       .tablename('tablename')
@@ -172,7 +182,7 @@ describe('lib', function() {
       .ascending(true)
       .query()).to.deep.equal(require('./fixtures/query_with_sort'));
   });
-  
+
   it('should return a valid json for query with descending sort', function() {
     expect(this.jedlik
       .tablename('tablename')
@@ -309,15 +319,21 @@ describe('lib', function() {
     it('should accept a tablename and items', function() {
       expect(this.jedlik
         .tablename('tablename')
-        .item({ key1: 1, key2: "value2" })
-        .item({ key3: "value3", key4: "value4" })
+        .item({
+          key1: 1,
+          key2: "value2"
+        })
+        .item({
+          key3: "value3",
+          key4: "value4"
+        })
         .batchWrite()).to.deep.equal(require('./fixtures/batchwrite'));
     });
 
   });
 
   describe('mapItem', function() {
-    
+
     it('should convert from DynamoDB syntax to JavaScript object syntax', function() {
       var item = {
         a: {
@@ -385,7 +401,7 @@ describe('lib', function() {
       sinon.stub(this.jedlik, 'mapItem');
     });
 
-    afterEach(function(){
+    afterEach(function() {
       if (this.jedlik.mapItem.restore) {
         this.jedlik.mapItem.restore();
       }

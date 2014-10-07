@@ -164,7 +164,7 @@ Jedlik.prototype.startrangekey = function(key, value, type) {
 Jedlik.prototype.rangekey = function(key, value, comparisonOp, type) {
   this._data.rangekey = {
     key: key,
-    value: value,
+    value: value && getValue(value),
     type: type || getType(value),
     comparisonOp: comparisonOp || 'EQ'
   };
