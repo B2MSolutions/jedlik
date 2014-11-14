@@ -291,7 +291,7 @@ describe('lib', function() {
       var createTable = tablename.createTable.bind(tablename);
 
       expect(createTable).to.
-      throw ('Setup hash key using "hashkey" method to create a new table');
+      throw('Setup hash key using "hashkey" method to create a new table');
     });
 
     it('should return a valid json for createTable with provision throughput set if it is present', function() {
@@ -316,7 +316,7 @@ describe('lib', function() {
 
   describe('batchwrite', function() {
 
-    it('should accept a tablename and items', function() {
+    it('should accept a tablename and items (single table format)', function() {
       expect(this.jedlik
         .tablename('tablename')
         .item({
@@ -329,7 +329,96 @@ describe('lib', function() {
         })
         .batchWrite()).to.deep.equal(require('./fixtures/batchwrite'));
     });
+    
+    it('should accept items, same table, multi-table format', function() {
+      expect(this.jedlik
+        .item({
+          tablename: 'tablename',
+          key1: 1,
+          key2: "value2"
+        })
+        .item({
+          tablename: 'tablename',
+          key3: "value3",
+          key4: "value4"
+        })
+        .batchWrite()).to.deep.equal(require('./fixtures/batchwrite'));
+    });
+    
+    it('should accept items, different table, multi-table format', function() {
+      expect(this.jedlik
+        .item({
+          tablename: 'tablename1',
+          key1: 1,
+          key2: "value2"
+        })
+        .item({
+          tablename: 'tablename1',
+          key3: "value3",
+          key4: "value4"
+        })
+        .item({
+          tablename: 'tablename2',
+          key5: 5,
+          key6: "value6"
+        })
+        .item({
+          tablename: 'tablename2',
+          key7: "value7",
+          key8: "value8"
+        })
+        .batchWrite()).to.deep.equal(require('./fixtures/batchwritemultitable'));
+    });
 
+  });
+
+  describe('batchGet', function() {
+    it('should accept items single-table format', function() {
+      expect(this.jedlik
+        .tablename('tablename1')
+        .item({
+          key1: 1,
+          key2: "value2"
+        })
+        .item({
+          key3: 3,
+          key4: "value4"
+        })
+        .batchGet()).to.deep.equal(require('./fixtures/batchget'));
+    });
+    it('should accept items multi-table format', function() {
+      expect(this.jedlik
+        .item({
+          tablename: 'tablename1',
+          key1: 1,
+          key2: "value2"
+        })
+        .item({
+          tablename: 'tablename1',
+          key3: 3,
+          key4: "value4"
+        })
+        .batchGet()).to.deep.equal(require('./fixtures/batchget'));
+    });
+    
+    it('should accept items with different table names multi-table', function() {
+      expect(this.jedlik
+        .item({
+          tablename: 'tablename1',
+          key1: 1,
+          key2: "value2"
+        })
+        .item({
+          tablename: 'tablename2',
+          key3: 3,
+          key4: "value4"
+        })
+        .item({
+          tablename: 'tablename2',
+          key5: 5
+        })
+        .batchGet()).to.deep.equal(require('./fixtures/batchgetmultitable'));
+    });
   });
 
   describe('mapItem', function() {

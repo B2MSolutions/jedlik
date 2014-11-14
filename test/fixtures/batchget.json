@@ -1,0 +1,22 @@
+{
+  "RequestItems": {
+    "tablename1": {
+      "Keys": [{
+          "key1": {
+            "N": "1"
+          },
+          "key2": {
+            "S": "value2"
+          }
+        }, {
+          "key3": {
+            "N": "3"
+          },
+          "key4": {
+            "S": "value4"
+          }
+        }
+      ]
+    }
+  }
+}

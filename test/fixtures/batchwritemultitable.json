@@ -1,0 +1,50 @@
+{
+  "RequestItems": {
+    "tablename1": [{
+      "PutRequest": {
+        "Item": {
+          "key1": {
+            "N": "1"
+          },
+          "key2": {
+            "S": "value2"
+          }
+        }
+      }
+    }, {
+      "PutRequest": {
+        "Item": {
+          "key3": {
+            "S": "value3"
+          },
+          "key4": {
+            "S": "value4"
+          }
+        }
+      }
+    }],
+    "tablename2": [{
+      "PutRequest": {
+        "Item": {
+          "key5": {
+            "N": "5"
+          },
+          "key6": {
+            "S": "value6"
+          }
+        }
+      }
+    }, {
+      "PutRequest": {
+        "Item": {
+          "key7": {
+            "S": "value7"
+          },
+          "key8": {
+            "S": "value8"
+          }
+        }
+      }
+    }]
+  }
+}

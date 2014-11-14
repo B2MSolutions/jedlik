@@ -44,7 +44,7 @@ Jedlik.prototype.query = function() {
     json.ExclusiveStartKey[this._data.starthashkey.key] = {};
     json.ExclusiveStartKey[this._data.starthashkey.key][this._data.starthashkey.type] = this._data.starthashkey.value.toString();
 
-    if(this._data.startrangekey) {
+    if (this._data.startrangekey) {
       json.ExclusiveStartKey[this._data.startrangekey.key] = {};
       json.ExclusiveStartKey[this._data.startrangekey.key][this._data.startrangekey.type] = this._data.startrangekey.value.toString();
     }
@@ -279,8 +279,14 @@ Jedlik.prototype.batchWrite = function() {
     RequestItems: {}
   };
 
-  var items = [];
+  var that = this;
   this._data.items.forEach(function(item) {
+    var tablename = item.tablename || that._data.tablename;
+
+    if (!json.RequestItems[tablename]) {
+      json.RequestItems[tablename] = []
+    }
+
     var itemDDB = {
       PutRequest: {
         Item: {}
@@ -288,20 +294,53 @@ Jedlik.prototype.batchWrite = function() {
     };
 
     Object.keys(item).forEach(function(key) {
-      var value = item[key];
-      itemDDB.PutRequest.Item[key] = {};
-      itemDDB.PutRequest.Item[key][getType(value)] = value.toString();
+      if (key !== 'tablename') {
+        var value = item[key];
+        itemDDB.PutRequest.Item[key] = {};
+        itemDDB.PutRequest.Item[key][getType(value)] = value.toString();
+      }
     });
 
-    items.push(itemDDB);
+    json.RequestItems[tablename].push(itemDDB);
+  })
+
+  return json;
+};
+
+Jedlik.prototype.batchGet = function() {
+  var json = {
+    RequestItems: {}
+  };
+  
+  var that = this;
+  this._data.items.forEach(function(item) {
+    var tablename = item.tablename || that._data.tablename;
+    
+    if (!json.RequestItems[tablename]) {
+      json.RequestItems[tablename] = {
+        Keys: []
+      }
+    }
+
+    var key = {};
+    Object.keys(item).forEach(function(k) {
+      if (k !== 'tablename') {
+        key[k] = {};
+        var value = item[k];
+        key[k][getType(value)] = value.toString();
+      };
+
+    });
+
+    json.RequestItems[tablename].Keys.push(key);
   });
 
-  json.RequestItems[this._data.tablename] = items;
   return json;
 };
 
 Jedlik.prototype.mapItem = function(item, keysToOmit) {
-  var ret = {}, keysToOmit = keysToOmit || [];
+  var ret = {},
+    keysToOmit = keysToOmit || [];
   var itemKeys = Object.keys(item);
   for (var i = 0; i < itemKeys.length; i++) {
     var key = itemKeys[i];
@@ -310,7 +349,7 @@ Jedlik.prototype.mapItem = function(item, keysToOmit) {
       var valueObj = item[key],
         type = Object.keys(valueObj)[0],
         value = item[key][type];
-    
+
       ret[key] = type === 'N' ? parseFloat(value, 10) : value;
     }
   }
