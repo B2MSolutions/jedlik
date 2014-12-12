@@ -33,6 +33,15 @@ Jedlik.prototype.query = function() {
     json.KeyConditions[this._data.rangekey.key].AttributeValueList[0][this._data.rangekey.type] = this._data.rangekey.value.toString();
   }
 
+  if (this._data.rangekeyBetween) {
+    json.KeyConditions[this._data.rangekeyBetween.key] = {
+      AttributeValueList: [{}, {}],
+      ComparisonOperator: 'BETWEEN'
+    }
+    json.KeyConditions[this._data.rangekeyBetween.key].AttributeValueList[0][this._data.rangekeyBetween.type] = this._data.rangekeyBetween.valueFrom;
+    json.KeyConditions[this._data.rangekeyBetween.key].AttributeValueList[1][this._data.rangekeyBetween.type] = this._data.rangekeyBetween.valueTo;
+  }
+
   this.addIfExists('TableName', 'tablename', json);
 
   if (!this._data.select) {
@@ -167,6 +176,16 @@ Jedlik.prototype.rangekey = function(key, value, comparisonOp, type) {
     value: value && getValue(value),
     type: type || getType(value),
     comparisonOp: comparisonOp || 'EQ'
+  };
+  return this;
+};
+
+Jedlik.prototype.rangekeyBetween = function(key, valueFrom, valueTo) {
+  this._data.rangekeyBetween = {
+    key: key,
+    valueFrom: valueFrom && getValue(valueFrom),
+    valueTo: valueTo && getValue(valueTo),
+    type: getType(valueFrom)
   };
   return this;
 };
@@ -311,11 +330,11 @@ Jedlik.prototype.batchGet = function() {
   var json = {
     RequestItems: {}
   };
-  
+
   var that = this;
   this._data.items.forEach(function(item) {
     var tablename = item.tablename || that._data.tablename;
-    
+
     if (!json.RequestItems[tablename]) {
       json.RequestItems[tablename] = {
         Keys: []

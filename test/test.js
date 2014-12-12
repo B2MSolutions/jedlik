@@ -329,7 +329,7 @@ describe('lib', function() {
         })
         .batchWrite()).to.deep.equal(require('./fixtures/batchwrite'));
     });
-    
+
     it('should accept items, same table, multi-table format', function() {
       expect(this.jedlik
         .item({
@@ -344,7 +344,7 @@ describe('lib', function() {
         })
         .batchWrite()).to.deep.equal(require('./fixtures/batchwrite'));
     });
-    
+
     it('should accept items, different table, multi-table format', function() {
       expect(this.jedlik
         .item({
@@ -400,7 +400,7 @@ describe('lib', function() {
         })
         .batchGet()).to.deep.equal(require('./fixtures/batchget'));
     });
-    
+
     it('should accept items with different table names multi-table', function() {
       expect(this.jedlik
         .item({
@@ -552,4 +552,16 @@ describe('lib', function() {
     });
   });
 
+  describe('keycondition', function() {
+
+    it('should add to KeyConditions for BETWEEN', function() {
+      var query = this.jedlik
+        .tablename('tablename')
+        .hashkey('hashkey', 'hashkeyvalue')
+        .rangekeyBetween('key', 'valueFrom', 'valueTo')
+        .query();
+      expect(query).to.deep.equal(require('./fixtures/query_rangekey_between'));
+    });
+
+  });
 });
