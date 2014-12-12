@@ -38,7 +38,14 @@ Accepts a key, a value and an optional `ComparisonOperator` which defaults to `E
 
 ### rangekey
 
-Same as (hashkey)[#hashkey].
+Same as [hashkey](#hashkey).
+
+### rangekeyBetween
+Add rangekey BETWEEN condition
+
+`.rangekeyBetween([keyName], [fromValue], [toValue])`
+
+Use only with `query`
 
 ### get
 
@@ -51,3 +58,10 @@ Returns the constructed JSON query.
 ### put
 
 Returns the constructed JSON putItem.
+
+### expected
+Add Expected condition for UpdateItem(`.update()`)
+
+`.expected([keyName], [expectedValue], [comparisonOperator])`
+
+Use only with `update`
