@@ -1,6 +1,6 @@
 {
   "name": "jedlik",
-  "version": "0.0.21",
+  "version": "0.1.0",
   "description": "Fluent syntax generator for DynamoDB.",
   "main": "index.js",
   "scripts": {
