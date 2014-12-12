@@ -42,15 +42,10 @@ Same as [hashkey](#hashkey).
 
 ### rangekeyBetween
 Add rangekey BETWEEN condition
+
 `.rangekeyBetween([keyName], [fromValue], [toValue])`
-##### Example usage
-```javascript
-var query = new Jedlik()
-    .tablename('table_name')
-    .hashkey('hash', 'hashvalue')
-    .rangekeyBetween('range', 2, 400)
-    .query()
-```
+
+Use only with `query`
 
 ### get
 
@@ -63,3 +58,10 @@ Returns the constructed JSON query.
 ### put
 
 Returns the constructed JSON putItem.
+
+### expected
+Add Expected condition for UpdateItem(`.update()`)
+
+`.expected([keyName], [expectedValue], [comparisonOperator])`
+
+Use only with `update`
