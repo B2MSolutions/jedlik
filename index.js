@@ -1,7 +1,8 @@
 function Jedlik() {
   this._data = {
     attributes: {},
-    items: []
+    items: [],
+    expected: []
   };
   this.addIfExists = function(attributeName, fieldName, json) {
     if (this._data[fieldName]) {
@@ -93,6 +94,18 @@ Jedlik.prototype.update = function() {
     json.Key[this._data.rangekey.key] = {};
     json.Key[this._data.rangekey.key][this._data.rangekey.type] = this._data.rangekey.value;
   }
+
+  if (this._data.expected.length > 0){
+    json.Expected = {};
+  }
+   
+  this._data.expected.forEach(function (expectation) {
+    json.Expected[expectation.key] = {
+      AttributeValueList: [{}],
+      ComparisonOperator: expectation.comparisonOp
+    };
+    json.Expected[expectation.key].AttributeValueList[0][expectation.type] = expectation.value;
+  });
 
   this.addIfExists('TableName', 'tablename', json);
   this.addIfExists('ReturnValues', 'returnvals', json);
@@ -324,6 +337,16 @@ Jedlik.prototype.batchWrite = function() {
   })
 
   return json;
+};
+
+Jedlik.prototype.expected = function (key, value, comparisonOp) {
+  this._data.expected.push({
+    key: key,
+    value: value && getValue(value),
+    type: getType(value),
+    comparisonOp: comparisonOp
+  });
+  return this;
 };
 
 Jedlik.prototype.batchGet = function() {

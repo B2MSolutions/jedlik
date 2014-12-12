@@ -1,0 +1,26 @@
+{
+  "AttributeUpdates": {},
+  "Key": {
+    "hashkey": {
+      "S": "hashkeyvalue"
+    },
+    "rangekey": {
+      "N": "123"
+    }
+  },
+  "Expected": {
+    "hashkey": {
+      "AttributeValueList": [{
+        "S": "hashkeyvalue"
+      }],
+      "ComparisonOperator": "NE"
+    },
+    "rangekey": {
+      "AttributeValueList": [{
+        "N": "123"
+      }],
+      "ComparisonOperator": "NE"
+    }
+  },
+  "TableName": "tablename"
+}

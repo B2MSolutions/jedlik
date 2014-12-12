@@ -560,7 +560,22 @@ describe('lib', function() {
         .hashkey('hashkey', 'hashkeyvalue')
         .rangekeyBetween('key', 'valueFrom', 'valueTo')
         .query();
-      expect(query).to.deep.equal(require('./fixtures/query_rangekey_between'));
+      expect(query).to.deep.equal(require('./fixtures/query-rangekey-between'));
+    });
+
+  });
+
+  describe('expected', function() {
+    
+    it('should add itself to update', function() {
+      var query = this.jedlik
+        .tablename('tablename')
+        .hashkey('hashkey', 'hashkeyvalue')
+        .rangekey('rangekey', 123)
+        .expected('hashkey', 'hashkeyvalue', 'NE')
+        .expected('rangekey', 123, 'NE')  
+        .update();
+      expect(query).to.deep.equal(require('./fixtures/update-with-expected'));
     });
 
   });
