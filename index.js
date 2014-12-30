@@ -408,10 +408,13 @@ Jedlik.prototype.mapItems = function(items, keysToOmit) {
 
 Jedlik.prototype.getItem = function() {
   var json = {
-    AttributesToGet: this._data.attributes,
     Key: {}
   };
-
+  
+  if (Array.isArray(this._data.attributes)) {
+    json.AttributesToGet = this._data.attributes;
+  }
+  
   json.Key[this._data.hashkey.key] = {};
   json.Key[this._data.hashkey.key][this._data.hashkey.type] = this._data.hashkey.value;
 

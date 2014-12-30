@@ -314,14 +314,27 @@ describe('lib', function() {
       .del()).to.deep.equal(require('./fixtures/delete'));
   });
 
-  it('should return a valid json for getItem', function() {
-    expect(this.jedlik
-      .tablename('tablename')
-      .hashkey('hashkey', 'hashkeyvalue')
-      .rangekey('rangekey', 'rangekeyvalue')
-      .attributes(['first', 'second'])
-      .getItem()).to.deep.equal(require('./fixtures/get_item'));
+  describe('getItem', function() {
+    it('should return a valid json for getItem', function() {
+      expect(this.jedlik
+             .tablename('tablename')
+             .hashkey('hashkey', 'hashkeyvalue')
+             .rangekey('rangekey', 'rangekeyvalue')
+             .attributes(['first', 'second'])
+             .getItem()).to.deep.equal(require('./fixtures/get_item'));
+    });
+
+    it('should return a valid json for getItem when attributes were not set', function() {
+      var query = this.jedlik
+            .tablename('tablename')
+            .hashkey('hashkey', 'hashkeyvalue')
+            .rangekey('rangekey', 'rangekeyvalue')
+            .getItem();
+
+      expect(query.AttributesToGet).to.be.undefined;
+    });
   });
+
 
   describe('batchwrite', function() {
 
