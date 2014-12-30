@@ -406,4 +406,22 @@ Jedlik.prototype.mapItems = function(items, keysToOmit) {
   });
 };
 
+Jedlik.prototype.getItem = function() {
+  var json = {
+    AttributesToGet: this._data.attributes,
+    Key: {}
+  };
+
+  json.Key[this._data.hashkey.key] = {};
+  json.Key[this._data.hashkey.key][this._data.hashkey.type] = this._data.hashkey.value;
+
+  if (this._data.rangekey) {
+    json.Key[this._data.rangekey.key] = {};
+    json.Key[this._data.rangekey.key][this._data.rangekey.type] = this._data.rangekey.value;
+  }
+
+  this.addIfExists('TableName', 'tablename', json);
+  return json;
+};
+
 module.exports = Jedlik;

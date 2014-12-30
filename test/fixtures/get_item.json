@@ -1,0 +1,12 @@
+{
+  "AttributesToGet": ["first", "second"],
+  "Key": {
+    "rangekey": {
+      "S": "rangekeyvalue"
+    },
+    "hashkey": {
+      "S": "hashkeyvalue"
+    }
+  },
+  "TableName": "tablename"
+}
