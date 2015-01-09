@@ -125,7 +125,8 @@ describe('lib', function() {
     });
 
     it('should not throw if the value is undefined or null', function() {
-      this.jedlik.attribute('attribute1', undefined , 'PUT');
+      var item = {}
+      this.jedlik.attribute('attribute1', item['Key not exists'] , 'PUT');
     });
   });
 
