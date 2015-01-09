@@ -123,9 +123,13 @@ describe('lib', function() {
         .attribute('attribute3', ['s1', 's2'])
         ._data.attributes).to.deep.equal(expected);
     });
+
+    it('should not throw if the value is undefined or null', function() {
+      this.jedlik.attribute('attribute1', undefined , 'PUT');
+    });
   });
 
-  xit('should have a fluent api', function() {
+  it.skip('should have a fluent api', function() {
     function getMethods(obj) {
       var result = [];
       for (var id in obj) {

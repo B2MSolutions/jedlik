@@ -230,7 +230,7 @@ Jedlik.prototype.throughput = function(throughput) {
 
 Jedlik.prototype.attribute = function(key, value, action) {
   this._data.attributes[key] = {
-    value: getValue(value),
+    value: value && getValue(value),
     type: getType(value),
     action: action || 'PUT'
   };
