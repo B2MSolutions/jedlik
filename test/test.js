@@ -125,8 +125,23 @@ describe('lib', function() {
     });
 
     it('should not throw if the value is undefined or null', function() {
-      var item = {}
+      var item = {};
       this.jedlik.attribute('attribute1', item['Key not exists'] , 'PUT');
+    });
+
+    it('should not add the attribute if the value is undefined or null', function() {
+      expect(this.jedlik.attribute('attribute4', null, 'PUT')._data.attributes).to.deep.equal({});
+      expect(this.jedlik.attribute('attribute4', undefined, 'PUT')._data.attributes).to.deep.equal({});
+    });
+
+    it('should add the attribute with false value', function() {
+      expect(this.jedlik.attribute('attribute4', false, 'PUT')._data.attributes).to.deep.equal({
+        attribute4: {
+          action: 'PUT',
+          type: 'S',
+          value: 'false'
+        }
+      });
     });
   });
 
