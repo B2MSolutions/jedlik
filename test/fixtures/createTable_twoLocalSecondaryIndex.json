@@ -1,0 +1,29 @@
+{
+  "AttributeDefinitions": [
+    { "AttributeName": "hashkey", "AttributeType": "S" },
+    { "AttributeName": "rangekey", "AttributeType": "N" },
+    { "AttributeName": "attributeName", "AttributeType": "S" },
+    { "AttributeName": "attributeName2", "AttributeType": "N" }
+  ],
+  "KeySchema": [
+    { "AttributeName": "hashkey", "KeyType": "HASH" },
+    { "AttributeName": "rangekey", "KeyType": "RANGE" }
+  ],
+  "LocalSecondaryIndexes": [{
+    "IndexName": "indexName",
+    "KeySchema": [
+      {"AttributeName": "hashkey", "KeyType": "HASH" },
+      {"AttributeName": "attributeName", "KeyType": "RANGE"}
+    ],
+    "Projection": {"ProjectionType": "KEYS_ONLY"}
+  }, {
+    "IndexName": "indexName2",
+    "KeySchema": [
+      {"AttributeName": "hashkey", "KeyType": "HASH" },
+      {"AttributeName": "attributeName2", "KeyType": "RANGE"}
+    ],
+    "Projection": {"ProjectionType": "ALL"}
+  }], 
+  "ProvisionedThroughput": { "ReadCapacityUnits": 1, "WriteCapacityUnits": 1 },
+  "TableName": "tablename"
+}

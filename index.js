@@ -2,6 +2,7 @@ function Jedlik() {
   this._data = {
     attributes: {},
     items: [],
+    localSecondaryIndexes: [],
     expected: []
   };
   this.addIfExists = function(attributeName, fieldName, json) {
@@ -193,6 +194,17 @@ Jedlik.prototype.rangekey = function(key, value, comparisonOp, type) {
   return this;
 };
 
+Jedlik.prototype.localSecondaryIndex = function(indexName, key, type, projectionType) {
+  this._data.localSecondaryIndexes.push({
+    indexName: indexName,
+    key: key,
+    type: type,
+    projectionType: projectionType
+  });
+  
+  return this;
+};
+
 Jedlik.prototype.rangekeyBetween = function(key, valueFrom, valueTo) {
   this._data.rangekeyBetween = {
     key: key,
@@ -302,6 +314,27 @@ Jedlik.prototype.createTable = function() {
     });
   }
 
+  if (this._data.localSecondaryIndexes[0]) {
+    json.LocalSecondaryIndexes = [];
+    this._data.localSecondaryIndexes.map(function(localSecondaryIndex) {
+      json.AttributeDefinitions.push({
+        AttributeName: localSecondaryIndex.key,
+        AttributeType: localSecondaryIndex.type
+      });
+      json.LocalSecondaryIndexes.push({
+        IndexName: localSecondaryIndex.indexName,
+        KeySchema:[
+          {AttributeName: this._data.hashkey.key, KeyType: 'HASH' },
+          {AttributeName: localSecondaryIndex.key, KeyType: 'RANGE' }
+        ],
+        Projection: {
+          ProjectionType: localSecondaryIndex.projectionType
+        }
+      });
+      
+    }.bind(this));
+  }
+      
   return json;
 };
 
