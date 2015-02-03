@@ -288,7 +288,7 @@ describe('lib', function() {
       .attribute('attribute1', 'STR')
       .attribute('attribute2', 1234)
       .put()).to.deep.equal(fixtureWithoutRangekey);
-  })
+  });
 
   describe('createTable', function() {
     it('should return a valid json for createTable when only hashkey is used', function() {
@@ -306,6 +306,25 @@ describe('lib', function() {
         .createTable()).to.deep.equal(require('./fixtures/createTable_range'));
     });
 
+    it('should return a valid json for createTable with Local secondary index', function() {
+      expect(this.jedlik
+        .tablename('tablename')
+        .hashkey('hashkey', null, 'S')
+        .rangekey('rangekey', null, null, 'N')
+        .localSecondaryIndex('indexName', 'attributeName', 'S', 'KEYS_ONLY')
+        .createTable()).to.deep.equal(require('./fixtures/createTable_localSecondaryIndex'));
+    });
+    
+    it('should return a valid json for createTable with two Local secondary index', function() {
+      expect(this.jedlik
+        .tablename('tablename')
+        .hashkey('hashkey', null, 'S')
+        .rangekey('rangekey', null, null, 'N')
+        .localSecondaryIndex('indexName', 'attributeName', 'S', 'KEYS_ONLY')
+        .localSecondaryIndex('indexName2', 'attributeName2', 'N', 'ALL')
+        .createTable()).to.deep.equal(require('./fixtures/createTable_twoLocalSecondaryIndex'));
+    });
+    
     it('should throw an error if user tries to call create table without calling "hashkey" method first', function() {
       var tablename = this.jedlik.tablename('tablename')
       var createTable = tablename.createTable.bind(tablename);
