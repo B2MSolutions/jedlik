@@ -63,11 +63,12 @@ Jedlik.prototype.query = function() {
 
   this.addIfExists('Limit', 'limit', json);
   this.addIfExists('Select', 'select', json);
+  this.addIfExists('IndexName', 'localIndexName', json);
 
   if (this._data.ascending === false) {
     json.ScanIndexForward = false;
   }
-
+  
   return json;
 };
 
@@ -202,6 +203,11 @@ Jedlik.prototype.localSecondaryIndex = function(indexName, key, type, projection
     projectionType: projectionType
   });
   
+  return this;
+};
+
+Jedlik.prototype.localIndexName = function(indexName) {
+  this._data.localIndexName = indexName;
   return this;
 };
 

@@ -638,6 +638,20 @@ describe('lib', function() {
         .update();
       expect(query).to.deep.equal(require('./fixtures/update-with-expected'));
     });
+  });
 
+  describe('query for local index', function() {
+    
+    it('should add itself to update', function() {
+      var query = this.jedlik
+            .tablename('tablename')
+            .hashkey('hashkey', 'hashkeyvalue')
+            .rangekey('rangekey', 123)
+            .localIndexName('local-index')
+            .attributes(['first', 'second'])
+            .query();
+
+      expect(query).to.deep.equal(require('./fixtures/query_with_local_index'));
+    });
   });
 });

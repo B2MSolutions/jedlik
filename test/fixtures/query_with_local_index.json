@@ -1,0 +1,21 @@
+{
+  "AttributesToGet": ["first", "second"],
+  "IndexName": "local-index",
+  "KeyConditions": {
+    "hashkey": {
+      "AttributeValueList": [{
+          "S": "hashkeyvalue"
+        }
+      ],
+      "ComparisonOperator": "EQ"
+    },
+    "rangekey": {
+      "AttributeValueList": [{
+          "N": "123"
+        }
+      ],
+      "ComparisonOperator": "EQ"
+    }
+  },
+  "TableName": "tablename"
+}
