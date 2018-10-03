@@ -115,12 +115,24 @@ describe('lib', function() {
           value: ['s1', 's2'],
           type: 'SS',
           action: 'PUT'
+        },
+        attribute4: {
+          value: { a: { N: '123' }, b: { S: 'STR' } },
+          type: 'M',
+          action: 'PUT'
+        },
+        attribute5: {
+          value: [ { M: { a: { N: '1' }, b: { S: 'S1' } } }, { M: { a: { N: '2' }, b: { S: 'S2' } } } ],
+          type: 'L',
+          action: 'PUT'
         }
       };
       expect(this.jedlik
         .attribute('attribute1', 'STR', 'PUT')
         .attribute('attribute2', 1234)
         .attribute('attribute3', ['s1', 's2'])
+        .attribute('attribute4', {a:123, b:'STR'})
+        .attribute('attribute5', [{a:1, b:'S1'}, {a:2, b:'S2'}])
         ._data.attributes).to.deep.equal(expected);
     });
 
@@ -367,7 +379,6 @@ describe('lib', function() {
       var query = this.jedlik
             .tablename('tablename')
             .hashkey('hashkey', 'hashkeyvalue')
-            .rangekey('rangekey', 'rangekeyvalue')
             .getItem();
 
       expect(query.AttributesToGet).to.be.undefined;
@@ -570,6 +581,27 @@ describe('lib', function() {
         },
         d: {
           SS: ["a", "b"]
+        },
+        e: {
+          M: { c: { S: "a"}, d: { N: "1"} }
+        },
+        f: {
+          L: [
+            { N: "1" },
+            { N: "1.1" }
+          ]
+        },
+        g: {
+          L: [
+            { S: "a" },
+            { S: "b" }
+          ]
+        },
+        h: {
+          L: [
+            { M: { c: { S: "a"}, d: { N: "1"} } },
+            { M: { c: { S: "b"}, d: { N: "1.2"} } }
+          ]
         }
       };
       var items = [item, item];
@@ -577,7 +609,11 @@ describe('lib', function() {
         a: 1,
         b: "a",
         c: 1.1,
-        d: ["a", "b"]
+        d: ["a", "b"],
+        e: { c:"a", d:1 }, 
+        f: [1, 1.1],
+        g: ["a", "b"],
+        h: [{ c:"a", d:1 }, { c:"b", d:1.2 }]
       };
       this.jedlik.mapItem.returns(expected);
 
@@ -600,12 +636,37 @@ describe('lib', function() {
         },
         d: {
           SS: ["a", "b"]
+        },
+        e: {
+          M: { c: { S: "a"}, d: { N: "1"} }
+        },
+        f: {
+          L: [
+            { N: "1" },
+            { N: "1.1" }
+          ]
+        },
+        g: {
+          L: [
+            { S: "a" },
+            { S: "b" }
+          ]
+        },
+        h: {
+          L: [
+            { M: { c: { S: "a"}, d: { N: "1"} } },
+            { M: { c: { S: "b"}, d: { N: "1.2"} } }
+          ]
         }
       };
       var items = [item, item];
       var expected = {
         b: "a",
-        d: ["a", "b"]
+        d: ["a", "b"],
+        e: { c:"a", d:1 },
+        f: [1, 1.1],
+        g: ["a", "b"],
+        h: [{ c:"a", d:1 }, { c:"b", d:1.2 }]
       };
 
       var result = this.jedlik.mapItems(items, ['a', 'c']);
