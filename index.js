@@ -68,7 +68,7 @@ Jedlik.prototype.query = function() {
   if (this._data.ascending === false) {
     json.ScanIndexForward = false;
   }
-  
+
   return json;
 };
 
@@ -100,7 +100,7 @@ Jedlik.prototype.update = function() {
   if (this._data.expected.length > 0){
     json.Expected = {};
   }
-   
+
   this._data.expected.forEach(function (expectation) {
     json.Expected[expectation.key] = {
       AttributeValueList: [{}],
@@ -148,14 +148,38 @@ Jedlik.prototype.tablename = function(tablename) {
 
 var getType = function(value) {
   if (Array.isArray(value)) {
-    return 'SS';
+    return (typeof value[0] == 'object') ? 'L' : 'SS';
   }
 
-  return Number.isFinite(value) ? 'N' : 'S';
+  return (typeof value == 'object') ? 'M' : Number.isFinite(value) ? 'N' : 'S';
 };
 
 var getValue = function(value) {
-  return Array.isArray(value) ? value : value.toString();
+  if (Array.isArray(value)) {
+    if (typeof value[0] == 'object') {
+      var result = [];
+      value.forEach(function(item) {
+        result.push({ M: getValue(item) });
+      });
+      return result;
+    } else {
+      return value;
+    }
+  }
+
+  if (typeof value == 'object') {
+    var result = {},
+      itemKeys = Object.keys(value);
+
+    itemKeys.forEach(function(key) {
+      var item = value[key];
+      result[key] = {};
+      result[key][getType(item)] = getValue(item);
+    });
+    return result;
+  }
+
+  return value.toString();
 };
 
 Jedlik.prototype.hashkey = function(key, value, type) {
@@ -202,7 +226,7 @@ Jedlik.prototype.localSecondaryIndex = function(indexName, key, type, projection
     type: type,
     projectionType: projectionType
   });
-  
+
   return this;
 };
 
@@ -250,7 +274,7 @@ Jedlik.prototype.attribute = function(key, value, action) {
   if (value == null) {
     return this;
   }
-  
+
   this._data.attributes[key] = {
     value: getValue(value),
     type: getType(value),
@@ -337,10 +361,10 @@ Jedlik.prototype.createTable = function() {
           ProjectionType: localSecondaryIndex.projectionType
         }
       });
-      
+
     }.bind(this));
   }
-      
+
   return json;
 };
 
@@ -424,18 +448,38 @@ Jedlik.prototype.batchGet = function() {
 };
 
 Jedlik.prototype.mapItem = function(item, keysToOmit) {
+  var self = this;
   var ret = {},
-    keysToOmit = keysToOmit || [];
+  keysToOmit = keysToOmit || [];
   var itemKeys = Object.keys(item);
+
   for (var i = 0; i < itemKeys.length; i++) {
     var key = itemKeys[i];
 
     if (keysToOmit.indexOf(key) === -1) {
       var valueObj = item[key],
         type = Object.keys(valueObj)[0],
-        value = item[key][type];
+        value = valueObj[type];
 
-      ret[key] = type === 'N' ? parseFloat(value, 10) : value;
+      if (type == 'L') {
+        ret[key] = [];
+
+        value.forEach(function(valueObj) {
+          var type = Object.keys(valueObj)[0],
+            value = valueObj[type];
+
+          ret[key].push(
+            type === 'M' ? self.mapItem(value) :
+            type === 'N' ? parseFloat(value, 10) :
+            value);
+        });
+
+      } else {
+        ret[key] =
+          type === 'M' ? self.mapItem(value) :
+          type === 'N' ? parseFloat(value, 10) :
+          value;
+      }
     }
   }
 
@@ -453,11 +497,11 @@ Jedlik.prototype.getItem = function() {
   var json = {
     Key: {}
   };
-  
+
   if (Array.isArray(this._data.attributes)) {
     json.AttributesToGet = this._data.attributes;
   }
-  
+
   json.Key[this._data.hashkey.key] = {};
   json.Key[this._data.hashkey.key][this._data.hashkey.type] = this._data.hashkey.value;
 
