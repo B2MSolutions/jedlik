@@ -148,7 +148,7 @@ Jedlik.prototype.tablename = function(tablename) {
 
 var getType = function(value) {
   if (Array.isArray(value)) {
-    return (typeof value[0] == 'object') ? 'L' : 'SS';
+    return (value.length === 0 || typeof value[0] == 'object') ? 'L' : 'SS';
   }
 
   return (typeof value == 'object') ? 'M' : Number.isFinite(value) ? 'N' : 'S';
@@ -156,7 +156,7 @@ var getType = function(value) {
 
 var getValue = function(value) {
   if (Array.isArray(value)) {
-    if (typeof value[0] == 'object') {
+    if (value.length === 0 || typeof value[0] == 'object') {
       var result = [];
       value.forEach(function(item) {
         result.push({ M: getValue(item) });
