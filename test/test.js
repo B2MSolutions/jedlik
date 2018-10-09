@@ -155,6 +155,16 @@ describe('lib', function() {
         }
       });
     });
+
+    it('should add array attribute with zero length as list', function() {
+      expect(this.jedlik.attribute('attribute4', [], 'PUT')._data.attributes).to.deep.equal({
+        attribute4: {
+          action: 'PUT',
+          type: 'L',
+          value: []
+        }
+      });
+    });
   });
 
   it.skip('should have a fluent api', function() {
