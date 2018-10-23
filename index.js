@@ -147,6 +147,10 @@ Jedlik.prototype.tablename = function(tablename) {
 };
 
 var getType = function(value) {
+  if (value == null) {
+    return 'NULL';
+  }
+
   if (Array.isArray(value)) {
     return (value.length === 0 || typeof value[0] == 'object') ? 'L' : 'SS';
   }
@@ -155,6 +159,10 @@ var getType = function(value) {
 };
 
 var getValue = function(value) {
+  if (value == null) {
+    return true;
+  }
+
   if (Array.isArray(value)) {
     if (value.length === 0 || typeof value[0] == 'object') {
       var result = [];
@@ -275,6 +283,10 @@ Jedlik.prototype.attribute = function(key, value, action) {
     return this;
   }
 
+  return this.nullableAttribute(key, value, action);
+}
+
+Jedlik.prototype.nullableAttribute = function(key, value, action) {
   this._data.attributes[key] = {
     value: getValue(value),
     type: getType(value),
@@ -468,14 +480,15 @@ Jedlik.prototype.mapItem = function(item, keysToOmit) {
           var type = Object.keys(valueObj)[0],
             value = valueObj[type];
 
-          ret[key].push(
-            type === 'M' ? self.mapItem(value) :
-            type === 'N' ? parseFloat(value, 10) :
-            value);
+        ret[key].push(
+          type === 'NULL' ? null :
+          type === 'M' ? self.mapItem(value) :
+          type === 'N' ? parseFloat(value, 10) :
+          value);
         });
-
       } else {
         ret[key] =
+          type === 'NULL' ? null :
           type === 'M' ? self.mapItem(value) :
           type === 'N' ? parseFloat(value, 10) :
           value;

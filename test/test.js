@@ -165,6 +165,55 @@ describe('lib', function() {
         }
       });
     });
+
+    it('should add nullable attribute property', function() {
+      var expected = {
+        attribute1: {
+          value: 'STR',
+          type: 'S',
+          action: 'PUT'
+        },
+        attribute2: {
+          value: '1234',
+          type: 'N',
+          action: 'PUT'
+        },
+        attribute3: {
+          value: ['s1', 's2'],
+          type: 'SS',
+          action: 'PUT'
+        },
+        attribute4: {
+          value: { a: { N: '123' }, b: { S: 'STR' } },
+          type: 'M',
+          action: 'PUT'
+        },
+        attribute5: {
+          value: [ { M: { a: { N: '1' }, b: { S: 'S1' } } }, { M: { a: { N: '2' }, b: { S: 'S2' } } } ],
+          type: 'L',
+          action: 'PUT'
+        },
+        attribute6: {
+          value: true,
+          type: 'NULL',
+          action: 'PUT'
+        },
+        attribute7: {
+          value: true,
+          type: 'NULL',
+          action: 'PUT'
+        }
+      };
+      expect(this.jedlik
+        .nullableAttribute('attribute1', 'STR', 'PUT')
+        .nullableAttribute('attribute2', 1234)
+        .nullableAttribute('attribute3', ['s1', 's2'])
+        .nullableAttribute('attribute4', {a:123, b:'STR'})
+        .nullableAttribute('attribute5', [{a:1, b:'S1'}, {a:2, b:'S2'}])
+        .nullableAttribute('attribute6', null)
+        .nullableAttribute('attribute7', undefined)
+        ._data.attributes).to.deep.equal(expected);
+    });
   });
 
   it.skip('should have a fluent api', function() {
@@ -612,6 +661,14 @@ describe('lib', function() {
             { M: { c: { S: "a"}, d: { N: "1"} } },
             { M: { c: { S: "b"}, d: { N: "1.2"} } }
           ]
+        },
+        i: {
+          NULL: true
+        },
+        j: {
+          L: [
+            { NULL: true }
+          ]
         }
       };
       var items = [item, item];
@@ -623,7 +680,9 @@ describe('lib', function() {
         e: { c:"a", d:1 }, 
         f: [1, 1.1],
         g: ["a", "b"],
-        h: [{ c:"a", d:1 }, { c:"b", d:1.2 }]
+        h: [{ c:"a", d:1 }, { c:"b", d:1.2 }],
+        i: null,
+        j: [null]
       };
       this.jedlik.mapItem.returns(expected);
 
@@ -667,6 +726,14 @@ describe('lib', function() {
             { M: { c: { S: "a"}, d: { N: "1"} } },
             { M: { c: { S: "b"}, d: { N: "1.2"} } }
           ]
+        },
+        i: {
+          NULL: true
+        },
+        j: {
+          L: [
+            { NULL: true }
+          ]
         }
       };
       var items = [item, item];
@@ -676,7 +743,9 @@ describe('lib', function() {
         e: { c:"a", d:1 },
         f: [1, 1.1],
         g: ["a", "b"],
-        h: [{ c:"a", d:1 }, { c:"b", d:1.2 }]
+        h: [{ c:"a", d:1 }, { c:"b", d:1.2 }],
+        i: null,
+        j: [null]
       };
 
       var result = this.jedlik.mapItems(items, ['a', 'c']);
