@@ -33,6 +33,15 @@ describe('lib', function() {
       expect(this.jedlik.hashkey(expected.key, expected.value)._data.hashkey).to.deep.equal(expected);
     });
 
+    it('should add hashkey property without value as string', function() {
+      var expected = {
+        key: 'KEY',
+        value: undefined,
+        type: 'S'
+      };
+      expect(this.jedlik.hashkey(expected.key)._data.hashkey).to.deep.equal(expected);
+    });
+
     it('should add hashkey property with the same type as specified in call params', function() {
       var expected = {
         key: 'KEY',
@@ -62,6 +71,16 @@ describe('lib', function() {
         comparisonOp: 'COMPARISONOP'
       };
       expect(this.jedlik.rangekey(expected.key, expected.value, expected.comparisonOp)._data.rangekey).to.deep.equal(expected);
+    });
+
+    it('should add rangekey property without value as string', function() {
+      var expected = {
+        key: 'KEY',
+        value: undefined,
+        type: 'S',
+        comparisonOp: 'EQ'
+      };
+      expect(this.jedlik.rangekey(expected.key)._data.rangekey).to.deep.equal(expected);
     });
 
     it('should add rangekey property with the same type as specified in call params', function() {
