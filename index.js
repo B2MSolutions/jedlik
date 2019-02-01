@@ -146,8 +146,8 @@ Jedlik.prototype.tablename = function(tablename) {
   return this;
 };
 
-var getType = function(value) {
-  if (value == null) {
+var getType = function(value, nullable) {
+  if (nullable && value == null) {
     return 'NULL';
   }
 
@@ -158,8 +158,8 @@ var getType = function(value) {
   return (typeof value == 'object') ? 'M' : Number.isFinite(value) ? 'N' : 'S';
 };
 
-var getValue = function(value) {
-  if (value == null) {
+var getValue = function(value, nullable) {
+  if (nullable && value == null) {
     return true;
   }
 
@@ -288,8 +288,8 @@ Jedlik.prototype.attribute = function(key, value, action) {
 
 Jedlik.prototype.nullableAttribute = function(key, value, action) {
   this._data.attributes[key] = {
-    value: getValue(value),
-    type: getType(value),
+    value: getValue(value, true),
+    type: getType(value, true),
     action: action || 'PUT'
   };
   return this;
