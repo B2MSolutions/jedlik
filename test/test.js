@@ -404,7 +404,23 @@ describe('lib', function() {
       throw('Setup hash key using "hashkey" method to create a new table');
     });
 
-    it('should return a valid json for createTable with provision throughput set if it is present', function() {
+    it('should return a valid json for createTable with PROVISIONED billing mode set if it is present', function() {
+      expect(this.jedlik
+        .tablename('tablename')
+        .hashkey('hashkey', null, 'S')
+        .billingmode('PROVISIONED')
+        .createTable()).to.deep.equal(require('./fixtures/createTable_provisioned'));
+    });
+
+    it('should return a valid json for createTable with PAY_PER_REQUEST billing mode set if it is present', function() {
+      expect(this.jedlik
+        .tablename('tablename')
+        .hashkey('hashkey', null, 'S')
+        .billingmode('PAY_PER_REQUEST')
+        .createTable()).to.deep.equal(require('./fixtures/createTable_payPerRequest'));
+    });
+
+    it('should return a valid json for createTable with provision throughput set if no billing mode', function() {
       expect(this.jedlik
         .tablename('tablename')
         .hashkey('hashkey', null, 'S')
@@ -413,6 +429,30 @@ describe('lib', function() {
           write: 7
         })
         .createTable()).to.deep.equal(require('./fixtures/createTable_throughput'));
+    });
+
+    it('should return a valid json for createTable with provision throughput set if billing mode is PROVISIONED', function() {
+      expect(this.jedlik
+        .tablename('tablename')
+        .hashkey('hashkey', null, 'S')
+        .billingmode('PROVISIONED')
+        .throughput({
+          read: 5,
+          write: 7
+        })
+        .createTable()).to.deep.equal(require('./fixtures/createTable_provisionedThroughput'));
+    });
+
+    it('should return a valid json for createTable without provision throughput if billing mode is PAY_PER_REQUEST', function() {
+      expect(this.jedlik
+        .tablename('tablename')
+        .hashkey('hashkey', null, 'S')
+        .billingmode('PAY_PER_REQUEST')
+        .throughput({
+          read: 5,
+          write: 7
+        })
+        .createTable()).to.deep.equal(require('./fixtures/createTable_payPerRequest'));
     });
   });
 

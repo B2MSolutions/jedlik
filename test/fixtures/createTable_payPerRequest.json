@@ -1,0 +1,10 @@
+{
+  "AttributeDefinitions": [
+    { "AttributeName": "hashkey", "AttributeType": "S" }
+  ],
+  "KeySchema": [
+    { "AttributeName": "hashkey", "KeyType": "HASH" }
+  ],
+  "TableName": "tablename",
+  "BillingMode": "PAY_PER_REQUEST"
+}

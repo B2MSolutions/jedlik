@@ -273,6 +273,11 @@ Jedlik.prototype.attributes = function(attributes) {
   return this;
 };
 
+Jedlik.prototype.billingmode = function(billingmode) {
+  this._data.billingmode = billingmode;
+  return this;
+};
+
 Jedlik.prototype.throughput = function(throughput) {
   this._data.throughput = throughput;
   return this;
@@ -318,19 +323,23 @@ Jedlik.prototype.del = function() {
 
 Jedlik.prototype.createTable = function() {
   var throughput = {
-    read: (this._data.throughput && this._data.throughput.read) || 1,
-    write: (this._data.throughput && this._data.throughput.write) || 1
+    ReadCapacityUnits: (this._data.throughput && this._data.throughput.read) || 1,
+    WriteCapacityUnits: (this._data.throughput && this._data.throughput.write) || 1
   };
 
   var json = {
     AttributeDefinitions: [],
     KeySchema: [],
-    ProvisionedThroughput: {
-      ReadCapacityUnits: throughput.read,
-      WriteCapacityUnits: throughput.write
-    },
     TableName: this._data.tablename
   };
+
+  if (this._data.billingmode) {
+    json.BillingMode = this._data.billingmode;
+  }
+
+  if (this._data.billingmode !== "PAY_PER_REQUEST") {
+    json.ProvisionedThroughput = throughput;
+  }
 
   if (this._data.hashkey) {
     json.AttributeDefinitions.push({

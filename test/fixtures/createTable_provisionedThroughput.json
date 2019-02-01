@@ -1,0 +1,11 @@
+{
+  "AttributeDefinitions": [
+    { "AttributeName": "hashkey", "AttributeType": "S" }
+  ],
+  "BillingMode": "PROVISIONED",
+  "KeySchema": [
+    { "AttributeName": "hashkey", "KeyType": "HASH" }
+  ],
+  "ProvisionedThroughput": { "ReadCapacityUnits": 5, "WriteCapacityUnits": 7 },
+  "TableName": "tablename"
+}
