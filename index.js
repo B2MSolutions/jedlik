@@ -170,6 +170,10 @@ Jedlik.prototype._getValue = function(value, nullable) {
     return true;
   }
 
+  if (self._data.booleanSupport && typeof value == 'boolean') {
+    return value;
+  }
+
   if (Array.isArray(value)) {
     if (value.length === 0 || typeof value[0] == 'object') {
       var result = [];
