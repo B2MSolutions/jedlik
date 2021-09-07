@@ -1,9 +1,10 @@
-function Jedlik() {
+function Jedlik(booleanSupport) {
   this._data = {
     attributes: {},
     items: [],
     localSecondaryIndexes: [],
-    expected: []
+    expected: [],
+    booleanSupport: booleanSupport
   };
   this.addIfExists = function(attributeName, fieldName, json) {
     if (this._data[fieldName]) {
@@ -146,7 +147,7 @@ Jedlik.prototype.tablename = function(tablename) {
   return this;
 };
 
-var getType = function(value, nullable) {
+Jedlik.prototype._getType = function(value, nullable) {
   if (nullable && value == null) {
     return 'NULL';
   }
@@ -155,10 +156,16 @@ var getType = function(value, nullable) {
     return (value.length === 0 || typeof value[0] == 'object') ? 'L' : 'SS';
   }
 
+  if (this._data.booleanSupport && typeof value == 'boolean') {
+    return "BOOL"
+  }
+
   return (typeof value == 'object') ? 'M' : Number.isFinite(value) ? 'N' : 'S';
 };
 
-var getValue = function(value, nullable) {
+Jedlik.prototype._getValue = function(value, nullable) {
+  var self = this;
+
   if (nullable && value == null) {
     return true;
   }
@@ -167,7 +174,7 @@ var getValue = function(value, nullable) {
     if (value.length === 0 || typeof value[0] == 'object') {
       var result = [];
       value.forEach(function(item) {
-        result.push({ M: getValue(item) });
+        result.push({ M: self._getValue(item) });
       });
       return result;
     } else {
@@ -182,7 +189,7 @@ var getValue = function(value, nullable) {
     itemKeys.forEach(function(key) {
       var item = value[key];
       result[key] = {};
-      result[key][getType(item)] = getValue(item);
+      result[key][self._getType(item)] = self._getValue(item);
     });
     return result;
   }
@@ -194,7 +201,7 @@ Jedlik.prototype.hashkey = function(key, value, type) {
   this._data.hashkey = {
     key: key,
     value: value,
-    type: type || getType(value)
+    type: type || this._getType(value)
   };
   return this;
 };
@@ -203,7 +210,7 @@ Jedlik.prototype.starthashkey = function(key, value, type) {
   this._data.starthashkey = {
     key: key,
     value: value,
-    type: type || getType(value)
+    type: type || this._getType(value)
   };
   return this;
 };
@@ -212,7 +219,7 @@ Jedlik.prototype.startrangekey = function(key, value, type) {
   this._data.startrangekey = {
     key: key,
     value: value,
-    type: type || getType(value)
+    type: type || this._getType(value)
   };
   return this;
 };
@@ -220,8 +227,8 @@ Jedlik.prototype.startrangekey = function(key, value, type) {
 Jedlik.prototype.rangekey = function(key, value, comparisonOp, type) {
   this._data.rangekey = {
     key: key,
-    value: value && getValue(value),
-    type: type || getType(value),
+    value: value && this._getValue(value),
+    type: type || this._getType(value),
     comparisonOp: comparisonOp || 'EQ'
   };
   return this;
@@ -246,9 +253,9 @@ Jedlik.prototype.localIndexName = function(indexName) {
 Jedlik.prototype.rangekeyBetween = function(key, valueFrom, valueTo) {
   this._data.rangekeyBetween = {
     key: key,
-    valueFrom: valueFrom && getValue(valueFrom),
-    valueTo: valueTo && getValue(valueTo),
-    type: getType(valueFrom)
+    valueFrom: valueFrom && this._getValue(valueFrom),
+    valueTo: valueTo && this._getValue(valueTo),
+    type: this._getType(valueFrom)
   };
   return this;
 };
@@ -291,10 +298,10 @@ Jedlik.prototype.attribute = function(key, value, action) {
   return this.nullableAttribute(key, value, action);
 }
 
-Jedlik.prototype.nullableAttribute = function(key, value, action) {
+Jedlik.prototype.nullableAttribute = function(key, value, action) { 
   this._data.attributes[key] = {
-    value: getValue(value, true),
-    type: getType(value, true),
+    value: this._getValue(value, true),
+    type: this._getType(value, true),
     action: action || 'PUT'
   };
   return this;
@@ -417,7 +424,7 @@ Jedlik.prototype.batchWrite = function() {
       if (key !== 'tablename') {
         var value = item[key];
         itemDDB.PutRequest.Item[key] = {};
-        itemDDB.PutRequest.Item[key][getType(value)] = value.toString();
+        itemDDB.PutRequest.Item[key][that._getType(value)] = value.toString();
       }
     });
 
@@ -430,8 +437,8 @@ Jedlik.prototype.batchWrite = function() {
 Jedlik.prototype.expected = function (key, value, comparisonOp) {
   this._data.expected.push({
     key: key,
-    value: value && getValue(value),
-    type: getType(value),
+    value: value && this._getValue(value),
+    type: this._getType(value),
     comparisonOp: comparisonOp
   });
   return this;
@@ -457,7 +464,7 @@ Jedlik.prototype.batchGet = function() {
       if (k !== 'tablename') {
         key[k] = {};
         var value = item[k];
-        key[k][getType(value)] = value.toString();
+        key[k][that._getType(value)] = value.toString();
       };
 
     });
