@@ -136,13 +136,18 @@ describe('lib', function() {
           action: 'PUT'
         },
         attribute4: {
-          value: { a: { N: '123' }, b: { S: 'STR' } },
+          value: { a: { N: '123' }, b: { S: 'STR' }, c: { S: 'true' }},
           type: 'M',
           action: 'PUT'
         },
         attribute5: {
-          value: [ { M: { a: { N: '1' }, b: { S: 'S1' } } }, { M: { a: { N: '2' }, b: { S: 'S2' } } } ],
+          value: [ { M: { a: { N: '1' }, b: { S: 'S1' } } }, { M: { a: { N: '2' }, b: { S: 'S2' }, c: { S: 'true' } } } ],
           type: 'L',
+          action: 'PUT'
+        },
+        attribute6: {
+          value: 'true',
+          type: 'S',
           action: 'PUT'
         }
       };
@@ -150,8 +155,54 @@ describe('lib', function() {
         .attribute('attribute1', 'STR', 'PUT')
         .attribute('attribute2', 1234)
         .attribute('attribute3', ['s1', 's2'])
-        .attribute('attribute4', {a:123, b:'STR'})
-        .attribute('attribute5', [{a:1, b:'S1'}, {a:2, b:'S2'}])
+        .attribute('attribute4', {a:123, b:'STR', c:true})
+        .attribute('attribute5', [{a:1, b:'S1'}, {a:2, b:'S2', c:true}])
+        .attribute('attribute6', true)
+        ._data.attributes).to.deep.equal(expected);
+    });
+
+    it('should add attribute property if boolean support', function() {
+      this.jedlik = new(this.lib)(true);
+
+      var expected = {
+        attribute1: {
+          value: 'STR',
+          type: 'S',
+          action: 'PUT'
+        },
+        attribute2: {
+          value: '1234',
+          type: 'N',
+          action: 'PUT'
+        },
+        attribute3: {
+          value: ['s1', 's2'],
+          type: 'SS',
+          action: 'PUT'
+        },
+        attribute4: {
+          value: { a: { N: '123' }, b: { S: 'STR' }, c: { BOOL: true } },
+          type: 'M',
+          action: 'PUT'
+        },
+        attribute5: {
+          value: [ { M: { a: { N: '1' }, b: { S: 'S1' } } }, { M: { a: { N: '2' }, b: { S: 'S2' }, c: { BOOL: true } } } ],
+          type: 'L',
+          action: 'PUT'
+        },
+        attribute6: {
+          value: true,
+          type: 'BOOL',
+          action: 'PUT'
+        }
+      };
+      expect(this.jedlik
+        .attribute('attribute1', 'STR', 'PUT')
+        .attribute('attribute2', 1234)
+        .attribute('attribute3', ['s1', 's2'])
+        .attribute('attribute4', {a:123, b:'STR', c:true})
+        .attribute('attribute5', [{a:1, b:'S1'}, {a:2, b:'S2', c:true}])
+        .attribute('attribute6', true)
         ._data.attributes).to.deep.equal(expected);
     });
 
@@ -203,12 +254,12 @@ describe('lib', function() {
           action: 'PUT'
         },
         attribute4: {
-          value: { a: { N: '123' }, b: { S: 'STR' } },
+          value: { a: { N: '123' }, b: { S: 'STR' }, c: { S: 'true' } },
           type: 'M',
           action: 'PUT'
         },
         attribute5: {
-          value: [ { M: { a: { N: '1' }, b: { S: 'S1' } } }, { M: { a: { N: '2' }, b: { S: 'S2' } } } ],
+          value: [ { M: { a: { N: '1' }, b: { S: 'S1' } } }, { M: { a: { N: '2' }, b: { S: 'S2' }, c: { S: 'true' } } } ],
           type: 'L',
           action: 'PUT'
         },
@@ -221,16 +272,79 @@ describe('lib', function() {
           value: true,
           type: 'NULL',
           action: 'PUT'
+        },
+        attribute8: {
+          value: 'true',
+          type: 'S',
+          action: 'PUT'
         }
       };
       expect(this.jedlik
         .nullableAttribute('attribute1', 'STR', 'PUT')
         .nullableAttribute('attribute2', 1234)
         .nullableAttribute('attribute3', ['s1', 's2'])
-        .nullableAttribute('attribute4', {a:123, b:'STR'})
-        .nullableAttribute('attribute5', [{a:1, b:'S1'}, {a:2, b:'S2'}])
+        .nullableAttribute('attribute4', {a:123, b:'STR', c:true})
+        .nullableAttribute('attribute5', [{a:1, b:'S1'}, {a:2, b:'S2', c:true}])
         .nullableAttribute('attribute6', null)
         .nullableAttribute('attribute7', undefined)
+        .nullableAttribute('attribute8', true)
+        ._data.attributes).to.deep.equal(expected);
+    });
+
+    it('should add nullable attribute property if boolean support', function() {
+      this.jedlik = new(this.lib)(true);
+
+      var expected = {
+        attribute1: {
+          value: 'STR',
+          type: 'S',
+          action: 'PUT'
+        },
+        attribute2: {
+          value: '1234',
+          type: 'N',
+          action: 'PUT'
+        },
+        attribute3: {
+          value: ['s1', 's2'],
+          type: 'SS',
+          action: 'PUT'
+        },
+        attribute4: {
+          value: { a: { N: '123' }, b: { S: 'STR' }, c: { BOOL: true } },
+          type: 'M',
+          action: 'PUT'
+        },
+        attribute5: {
+          value: [ { M: { a: { N: '1' }, b: { S: 'S1' } } }, { M: { a: { N: '2' }, b: { S: 'S2' }, c: { BOOL: true } } } ],
+          type: 'L',
+          action: 'PUT'
+        },
+        attribute6: {
+          value: true,
+          type: 'NULL',
+          action: 'PUT'
+        },
+        attribute7: {
+          value: true,
+          type: 'NULL',
+          action: 'PUT'
+        },
+        attribute8: {
+          value: true,
+          type: 'BOOL',
+          action: 'PUT'
+        }
+      };
+      expect(this.jedlik
+        .nullableAttribute('attribute1', 'STR', 'PUT')
+        .nullableAttribute('attribute2', 1234)
+        .nullableAttribute('attribute3', ['s1', 's2'])
+        .nullableAttribute('attribute4', {a:123, b:'STR', c:true})
+        .nullableAttribute('attribute5', [{a:1, b:'S1'}, {a:2, b:'S2', c:true}])
+        .nullableAttribute('attribute6', null)
+        .nullableAttribute('attribute7', undefined)
+        .nullableAttribute('attribute8', true)
         ._data.attributes).to.deep.equal(expected);
     });
   });
