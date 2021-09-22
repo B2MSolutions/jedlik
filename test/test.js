@@ -589,12 +589,19 @@ describe('lib', function() {
     });
   });
 
-  it('should return a valid json for delete', function() {
+  it('should return a valid json for delete when only hashkey is used', function() {
+    expect(this.jedlik
+      .tablename('tablename')
+      .hashkey('hashkey', 'hashkeyvalue')
+      .del()).to.deep.equal(require('./fixtures/delete_hash'));
+  });
+
+  it('should return a valid json for delete when both hashkey and rangekey are used', function() {
     expect(this.jedlik
       .tablename('tablename')
       .hashkey('hashkey', 'hashkeyvalue')
       .rangekey('rangekey', 'rangekeyvalue')
-      .del()).to.deep.equal(require('./fixtures/delete'));
+      .del()).to.deep.equal(require('./fixtures/delete_range'));
   });
 
   describe('getItem', function() {

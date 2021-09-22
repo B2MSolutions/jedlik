@@ -324,8 +324,10 @@ Jedlik.prototype.del = function() {
   json.Key[this._data.hashkey.key] = {};
   json.Key[this._data.hashkey.key][this._data.hashkey.type] = this._data.hashkey.value;
 
-  json.Key[this._data.rangekey.key] = {};
-  json.Key[this._data.rangekey.key][this._data.rangekey.type] = this._data.rangekey.value;
+  if (this._data.rangekey) {
+    json.Key[this._data.rangekey.key] = {};
+    json.Key[this._data.rangekey.key][this._data.rangekey.type] = this._data.rangekey.value;
+  }
 
   this.addIfExists('TableName', 'tablename', json);
 
