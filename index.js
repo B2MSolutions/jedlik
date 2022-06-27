@@ -98,7 +98,7 @@ Jedlik.prototype.update = function() {
     json.Key[this._data.rangekey.key][this._data.rangekey.type] = this._data.rangekey.value;
   }
 
-  if (this._data.expected.length > 0){
+  if (this._data.expected.length > 0) {
     json.Expected = {};
   }
 
@@ -147,13 +147,29 @@ Jedlik.prototype.tablename = function(tablename) {
   return this;
 };
 
-Jedlik.prototype._getType = function(value, nullable) {
+Jedlik.prototype._getType = function(value, nullable, subType) {
+  var self = this;
+
   if (nullable && value == null) {
     return 'NULL';
   }
 
   if (Array.isArray(value)) {
-    return (value.length === 0 || typeof value[0] == 'object') ? 'L' : 'SS';
+    if (subType || value.length === 0) {
+      return 'L';
+    }
+
+    var strings = true;
+
+    value.forEach(function(item) {
+      var type = self._getType(item, true, true);
+
+      if (type != 'S') {
+        strings = false;
+      }
+    });
+
+    return strings ? 'SS' : 'L';
   }
 
   if (this._data.booleanSupport && typeof value == 'boolean') {
@@ -175,20 +191,32 @@ Jedlik.prototype._getValue = function(value, nullable) {
   }
 
   if (Array.isArray(value)) {
-    if (value.length === 0 || typeof value[0] == 'object') {
-      var result = [];
-      value.forEach(function(item) {
-        result.push({ M: self._getValue(item) });
-      });
-      return result;
-    } else {
-      return value;
+    if (value.length === 0) {
+      return [];
     }
+
+    var result = [];
+    var strings = true;
+
+    value.forEach(function(item) {
+      var type = self._getType(item, true, true);
+
+      if (type != 'S') {
+        strings = false;
+      }
+
+      var data = {};
+      data[type] = self._getValue(item, true);
+
+      result.push(data);
+    });
+
+    return strings ? value : result;
   }
 
   if (typeof value == 'object') {
-    var result = {},
-      itemKeys = Object.keys(value);
+    var result = {};
+    var itemKeys = Object.keys(value);
 
     itemKeys.forEach(function(key) {
       var item = value[key];
@@ -387,9 +415,9 @@ Jedlik.prototype.createTable = function() {
       });
       json.LocalSecondaryIndexes.push({
         IndexName: localSecondaryIndex.indexName,
-        KeySchema:[
-          {AttributeName: this._data.hashkey.key, KeyType: 'HASH' },
-          {AttributeName: localSecondaryIndex.key, KeyType: 'RANGE' }
+        KeySchema: [
+          { AttributeName: this._data.hashkey.key, KeyType: 'HASH' },
+          { AttributeName: localSecondaryIndex.key, KeyType: 'RANGE' }
         ],
         Projection: {
           ProjectionType: localSecondaryIndex.projectionType
@@ -483,8 +511,8 @@ Jedlik.prototype.batchGet = function() {
 
 Jedlik.prototype.mapItem = function(item, keysToOmit) {
   var self = this;
-  var ret = {},
-  keysToOmit = keysToOmit || [];
+  var ret = {};
+  var keysToOmit = keysToOmit || [];
   var itemKeys = Object.keys(item);
 
   for (var i = 0; i < itemKeys.length; i++) {
@@ -499,14 +527,14 @@ Jedlik.prototype.mapItem = function(item, keysToOmit) {
         ret[key] = [];
 
         value.forEach(function(valueObj) {
-          var type = Object.keys(valueObj)[0],
-            value = valueObj[type];
+          var type = Object.keys(valueObj)[0];
+          var value = valueObj[type];
 
-        ret[key].push(
-          type === 'NULL' ? null :
-          type === 'M' ? self.mapItem(value) :
-          type === 'N' ? parseFloat(value, 10) :
-          value);
+          ret[key].push(
+            type === 'NULL' ? null :
+            type === 'M' ? self.mapItem(value) :
+            type === 'N' ? parseFloat(value, 10) :
+            value);
         });
       } else {
         ret[key] =

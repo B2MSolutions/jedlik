@@ -149,6 +149,11 @@ describe('lib', function() {
           value: 'true',
           type: 'S',
           action: 'PUT'
+        },
+        attribute7: {
+          value: [ { NULL: true }, { S: 's1' }, { S: 's2' } ],
+          type: 'L',
+          action: 'PUT'
         }
       };
       expect(this.jedlik
@@ -158,6 +163,7 @@ describe('lib', function() {
         .attribute('attribute4', {a:123, b:'STR', c:true})
         .attribute('attribute5', [{a:1, b:'S1'}, {a:2, b:'S2', c:true}])
         .attribute('attribute6', true)
+        .attribute('attribute7', [null, 's1', 's2'])
         ._data.attributes).to.deep.equal(expected);
     });
 
@@ -194,6 +200,11 @@ describe('lib', function() {
           value: true,
           type: 'BOOL',
           action: 'PUT'
+        },
+        attribute7: {
+          value: [ { NULL: true }, { S: 's1' }, { S: 's2' } ],
+          type: 'L',
+          action: 'PUT'
         }
       };
       expect(this.jedlik
@@ -203,6 +214,7 @@ describe('lib', function() {
         .attribute('attribute4', {a:123, b:'STR', c:true})
         .attribute('attribute5', [{a:1, b:'S1'}, {a:2, b:'S2', c:true}])
         .attribute('attribute6', true)
+        .attribute('attribute7', [null, 's1', 's2'])
         ._data.attributes).to.deep.equal(expected);
     });
 
@@ -277,6 +289,11 @@ describe('lib', function() {
           value: 'true',
           type: 'S',
           action: 'PUT'
+        },
+        attribute9: {
+          value: [ { NULL: true }, { S: 's1' }, { S: 's2' } ],
+          type: 'L',
+          action: 'PUT'
         }
       };
       expect(this.jedlik
@@ -288,6 +305,7 @@ describe('lib', function() {
         .nullableAttribute('attribute6', null)
         .nullableAttribute('attribute7', undefined)
         .nullableAttribute('attribute8', true)
+        .nullableAttribute('attribute9', [null, 's1', 's2'])
         ._data.attributes).to.deep.equal(expected);
     });
 
@@ -334,6 +352,11 @@ describe('lib', function() {
           value: true,
           type: 'BOOL',
           action: 'PUT'
+        },
+        attribute9: {
+          value: [ { NULL: true }, { S: 's1' }, { S: 's2' } ],
+          type: 'L',
+          action: 'PUT'
         }
       };
       expect(this.jedlik
@@ -345,6 +368,7 @@ describe('lib', function() {
         .nullableAttribute('attribute6', null)
         .nullableAttribute('attribute7', undefined)
         .nullableAttribute('attribute8', true)
+        .nullableAttribute('attribute9', [null, 's1', 's2'])
         ._data.attributes).to.deep.equal(expected);
     });
   });
