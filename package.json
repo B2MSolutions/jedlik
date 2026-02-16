@@ -4,7 +4,8 @@
   "description": "Fluent syntax generator for DynamoDB.",
   "main": "index.js",
   "scripts": {
-    "test": "set -e;./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha test/test.js;./node_modules/istanbul/lib/cli.js check-coverage",
+    "test": "TS_NODE_TYPE_CHECK=Y nyc --all --silent mocha test/test.js",
+    "posttest": "nyc report && nyc report --reporter=html && nyc check-coverage",
     "integration": "echo \"no integration tests\""
   },
   "repository": {
@@ -35,9 +36,18 @@
     }
   ],
   "devDependencies": {
-    "chai": "~1.9.1",
-    "istanbul": "~0.2.7",
-    "mocha": "~1.18.2",
-    "sinon": "~1.10.3"
+    "chai": "4.5.0",
+    "mocha": "10.8.2",
+    "nyc": "17.1.0",
+    "sinon": "21.0.1"
+  },
+  "nyc": {
+    "extension": [
+      ".js"
+    ],
+    "branches": 100,
+    "lines": 100,
+    "functions": 100,
+    "statements": 100
   }
 }
